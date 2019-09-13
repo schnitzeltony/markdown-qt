@@ -63,3 +63,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt5::Quick
     ${CMARK_LIBRARIES}
 )
+
+install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
