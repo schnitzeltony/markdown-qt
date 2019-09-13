@@ -1,4 +1,4 @@
-#include "cmarkdown-qt.h"
+#include "markdown-qt.h"
 #include <cmark.h>
 #include <QQmlEngine>
 #include <QFile>

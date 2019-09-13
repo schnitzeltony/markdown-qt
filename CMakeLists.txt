@@ -15,8 +15,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # cmake macros
 include(FeatureSummary)
+include(GNUInstallDirs)
 
-# Qt5 libs
+# qt5 libs
 find_package(Qt5 COMPONENTS Core Quick REQUIRED)
 
 # cmark lib
@@ -25,14 +26,16 @@ pkg_check_modules (CMARK REQUIRED libcmark>=0.28.3)
 
 # all sources by type
 set(PUBLIC_HEADERS
-    cmarkdown-qt.h
+    markdown-qt.h
 )
 
+# find sundown includes
 include_directories(
     ${CMAKE_SOURCE_DIR}/sundown/src
 )
 
-set(SOURCES_SUNDOWN
+# set sundown sources
+set(SUNDOWN_SOURCES
     sundown/html/html.c
     sundown/html/html_smartypants.c
     sundown/html/houdini_html_e.c
@@ -43,26 +46,55 @@ set(SOURCES_SUNDOWN
     sundown/src/stack.c
 )
 
-set(SOURCES
-    cmarkdown-qt.cpp
-    ${SOURCES_SUNDOWN}
+# all sundown headers are private
+set(SUNDOWN_PRIVATE_HEADER_DIRS
+    sundown/html
+    sundown/src
 )
 
+# all sources (once support for installed sundown is added this needs change)
+set(SOURCES
+    src/markdown-qt.cpp
+    ${SUNDOWN_SOURCES}
+)
+
+# md templates as resources
 set(RESOURCES
     resources.qrc
 )
 
+# build the library
 add_library(${PROJECT_NAME} SHARED ${SOURCES} ${RESOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION ${MARKDOWNQT_VERSION_MAJOR})
-#set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER ${PUBLIC_HEADERS})
 
+# some target magic
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+
+# make linker happy
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt5::Core
     Qt5::Quick
     ${CMARK_LIBRARIES}
 )
 
-install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+# tell cmake about public/privet headers
+target_include_directories(${PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+    PRIVATE ${SUNDOWN_PRIVATE_HEADER_DIRS})
 
+# install public header
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+# install library
+install(TARGETS ${PROJECT_NAME} EXPORT MarkdownQtConfig LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+# install cmake-files
+install(EXPORT MarkdownQtConfig DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MarkdownQt)
+
+# for builddir
+export(TARGETS ${PROJECT_NAME} FILE MarkdownQtConfig.cmake)
+
+# spawn out some info on configuration
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
