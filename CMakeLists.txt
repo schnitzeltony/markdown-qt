@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(markdown-qt LANGUAGES CXX)
+project(markdown-qt LANGUAGES C CXX)
 set(MARKDOWNQT_VERSION_MAJOR "0")
 set(MARKDOWNQT_VERSION_MINOR "0")
 set(MARKDOWNQT_VERSION_PATCH "1")
@@ -28,8 +28,24 @@ set(PUBLIC_HEADERS
     cmarkdown-qt.h
 )
 
+include_directories(
+    ${CMAKE_SOURCE_DIR}/sundown/src
+)
+
+set(SOURCES_SUNDOWN
+    sundown/html/html.c
+    sundown/html/html_smartypants.c
+    sundown/html/houdini_html_e.c
+    sundown/html/houdini_href_e.c
+    sundown/src/autolink.c
+    sundown/src/buffer.c
+    sundown/src/markdown.c
+    sundown/src/stack.c
+)
+
 set(SOURCES
     cmarkdown-qt.cpp
+    ${SOURCES_SUNDOWN}
 )
 
 set(RESOURCES

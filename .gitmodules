@@ -1,0 +1,6 @@
+[submodule "github-markdown-css"]
+	path = github-markdown-css
+	url = https://github.com/sindresorhus/github-markdown-css.git
+[submodule "sundown"]
+	path = sundown
+	url = https://github.com/vmg/sundown.git
