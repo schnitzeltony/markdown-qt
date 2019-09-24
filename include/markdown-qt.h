@@ -17,6 +17,12 @@ public:
   };
   Q_ENUM(TreatParam)
 
+  enum ConvertType {
+    ConvertCmark = 0,
+    ConvertSundown = 1,
+  };
+  Q_ENUM(ConvertType)
+
   enum OutputStyle {
     StyleDefault = 0,
     StyleGithub = 1,
@@ -35,7 +41,7 @@ public:
    * @param strIn Either Commonmark formatted text or filename or..
    * @return Text in HTML format
    */
-  Q_INVOKABLE static QString stringToHtml(TreatParam paramAs, const QString &strIn, OutputStyle outputStyle = StyleDefault);
+  Q_INVOKABLE static QString stringToHtml(TreatParam paramAs, const QString &strIn, ConvertType convertType = ConvertSundown, OutputStyle outputStyle = StyleDefault);
 
 signals:
 

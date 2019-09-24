@@ -1,5 +1,8 @@
 #include "markdown-qt.h"
 #include <cmark.h>
+#include <markdown.h>
+#include <html.h>
+#include <buffer.h>
 #include <QQmlEngine>
 #include <QFile>
 #include <QString>
@@ -21,7 +24,7 @@ QObject *CMarkDownQt::getQMLInstance(QQmlEngine *t_engine, QJSEngine *t_scriptEn
     return new CMarkDownQt();
 }
 
-QString CMarkDownQt::stringToHtml(TreatParam paramAs, const QString &strIn, OutputStyle outputStyle)
+QString CMarkDownQt::stringToHtml(TreatParam paramAs, const QString &strIn, ConvertType convertType, OutputStyle outputStyle)
 {
     QByteArray tmpData;
     switch(paramAs) {
@@ -37,7 +40,41 @@ QString CMarkDownQt::stringToHtml(TreatParam paramAs, const QString &strIn, Outp
         break;
     }
     }
-    QString strHtml = QString::fromUtf8(cmark_markdown_to_html(tmpData.constData(), size_t(tmpData.size()), CMARK_OPT_DEFAULT));
+    QString strHtml;
+    switch(convertType) {
+        case ConvertCmark:
+            strHtml = QString::fromUtf8(cmark_markdown_to_html(tmpData.constData(), size_t(tmpData.size()), CMARK_OPT_DEFAULT));
+            break;
+        case ConvertSundown:
+        {
+            struct sd_callbacks callbacks;
+            struct html_renderopt options;
+            struct sd_markdown *markdown;
+            struct buf *sdInputBuf, *sdOutputBuf;
+            // fill input buffer (size is constant -> realloc size is fill size)
+            sdInputBuf = bufnew(size_t(tmpData.size()));
+            bufput(sdInputBuf, tmpData.constData(), size_t(tmpData.size()));
+            // out (realloc size taken from example)
+            sdOutputBuf = bufnew(size_t(64));
+            sdhtml_renderer(&callbacks, &options, 0);
+            // select all extensions for now
+            markdown = sd_markdown_new(
+                        MKDEXT_NO_INTRA_EMPHASIS | MKDEXT_TABLES | MKDEXT_FENCED_CODE | MKDEXT_AUTOLINK | MKDEXT_STRIKETHROUGH | MKDEXT_SPACE_HEADERS | MKDEXT_SUPERSCRIPT | MKDEXT_LAX_SPACING,
+                        16, &callbacks, &options);
+            // convert
+            sd_markdown_render(sdOutputBuf, sdInputBuf->data, sdInputBuf->size, markdown);
+            sd_markdown_free(markdown);
+
+            strHtml = QString::fromUtf8(reinterpret_cast<char*>(sdOutputBuf->data), int(sdOutputBuf->size));
+
+            /* cleanup */
+            bufrelease(sdInputBuf);
+            bufrelease(sdOutputBuf);
+
+
+            break;
+        }
+    }
 
     // Add style / headers / footers
     QString strHeaderName, strFooterName, strStyleName, strStyleFooterName;
