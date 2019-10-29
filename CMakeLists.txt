@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(markdown-qt LANGUAGES C CXX)
+project(libmarkdownqt LANGUAGES C CXX)
 set(MARKDOWNQT_VERSION_MAJOR "0")
 set(MARKDOWNQT_VERSION_MINOR "0")
 set(MARKDOWNQT_VERSION_PATCH "1")
@@ -46,12 +46,6 @@ set(SUNDOWN_SOURCES
     sundown/src/stack.c
 )
 
-# all sundown headers are private
-set(SUNDOWN_PRIVATE_HEADER_DIRS
-    sundown/html
-    sundown/src
-)
-
 # all sources (once support for installed sundown is added this needs change)
 set(SOURCES
     src/markdown-qt.cpp
@@ -64,37 +58,51 @@ set(RESOURCES
 )
 
 # build the library
-add_library(${PROJECT_NAME} SHARED ${SOURCES} ${RESOURCES})
-set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION ${MARKDOWNQT_VERSION_MAJOR})
+add_library(MarkdownQt SHARED ${SOURCES} ${RESOURCES})
+set_target_properties(MarkdownQt PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(MarkdownQt PROPERTIES SOVERSION ${MARKDOWNQT_VERSION_MAJOR})
 
 # some target magic
-target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+target_compile_definitions(MarkdownQt PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 
-# make linker happy
-target_link_libraries(${PROJECT_NAME} PRIVATE
-    Qt5::Core
-    Qt5::Quick
-    ${CMARK_LIBRARIES}
+# dependencies
+target_link_libraries(MarkdownQt
+    PUBLIC
+        Qt5::Core
+        Qt5::Quick
+    PRIVATE
+        ${CMARK}
 )
 
-# tell cmake about public/privet headers
-target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-    PRIVATE ${SUNDOWN_PRIVATE_HEADER_DIRS})
+# tell cmake about public/private headers
+target_include_directories(MarkdownQt
+    PUBLIC
+        $<INSTALL_INTERFACE:include/markdown-qt>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/sundown/html
+        ${CMAKE_CURRENT_SOURCE_DIR}/sundown/src)
 
 # install public header
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(
+    DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
 
 # install library
-install(TARGETS ${PROJECT_NAME} EXPORT MarkdownQtConfig LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(TARGETS MarkdownQt
+    EXPORT MarkdownQtExport
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    INCLUDES DESTINATION include
+)
 
-# install cmake-files
-install(EXPORT MarkdownQtConfig DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MarkdownQt)
+# install targets cmake-files
+install(EXPORT MarkdownQtExport
+    FILE MarkdownQtTargets.cmake
+    NAMESPACE MarkdownQt
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MarkdownQt
+)
 
-# for builddir
-export(TARGETS ${PROJECT_NAME} FILE MarkdownQtConfig.cmake)
 
 # spawn out some info on configuration
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
