@@ -22,7 +22,7 @@ find_package(Qt5 COMPONENTS Core Quick REQUIRED)
 
 # cmark lib
 find_package(PkgConfig REQUIRED)
-pkg_check_modules (CMARK REQUIRED libcmark>=0.28.3)
+pkg_check_modules(CMARK REQUIRED libcmark>=0.28.3)
 
 # all sources by type
 set(PUBLIC_HEADERS
@@ -57,8 +57,11 @@ set(RESOURCES
     resources.qrc
 )
 
-# build the library
-add_library(MarkdownQt SHARED ${SOURCES} ${RESOURCES})
+# the library
+add_library(MarkdownQt
+    SHARED
+        ${SOURCES} ${RESOURCES}
+)
 set_target_properties(MarkdownQt PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(MarkdownQt PROPERTIES SOVERSION ${MARKDOWNQT_VERSION_MAJOR})
 
@@ -81,7 +84,12 @@ target_include_directories(MarkdownQt
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/sundown/html
-        ${CMAKE_CURRENT_SOURCE_DIR}/sundown/src)
+        ${CMAKE_CURRENT_SOURCE_DIR}/sundown/src
+)
+
+# compiler options
+target_compile_features(MarkdownQt PRIVATE cxx_std_11)
+target_compile_options(MarkdownQt PRIVATE -Wall)
 
 # install public header
 install(
@@ -93,7 +101,23 @@ install(
 install(TARGETS MarkdownQt
     EXPORT MarkdownQtExport
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    INCLUDES DESTINATION include
+)
+
+# configure MarkdownQtConfigVersion.cmake
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    MarkdownQtConfigVersion.cmake
+    VERSION ${PACKAGE_VERSION}
+    COMPATIBILITY SameMinorVersion
+)
+
+# configure MarkdownQtConfig.cmake
+configure_file(MarkdownQtConfig.cmake.in MarkdownQtConfig.cmake @ONLY)
+
+# configure MarkdownQtConfig(Version).cmake
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/MarkdownQtConfig.cmake"
+              "${CMAKE_CURRENT_BINARY_DIR}/MarkdownQtConfigVersion.cmake"
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MarkdownQt
 )
 
 # install targets cmake-files
