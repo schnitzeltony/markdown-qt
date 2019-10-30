@@ -43,7 +43,7 @@ public:
    * @param strIn Either Commonmark formatted text or filename or..
    * @return Text in HTML format
    */
-  Q_INVOKABLE static QString stringToHtml(TreatParam paramAs, const QString &strIn, ConvertType convertType = ConvertSundown, OutputStyle outputStyle = StyleDefault);
+  Q_INVOKABLE static QString stringToHtml(TreatParam paramAs, const QString &strIn, ConvertType convertType = ConvertCmark, OutputStyle outputStyle = StyleDefault);
 
 signals:
 
