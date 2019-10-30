@@ -62,6 +62,7 @@ add_library(MarkdownQt
     SHARED
         ${SOURCES} ${RESOURCES}
 )
+add_library(MarkdownQt::MarkdownQt ALIAS MarkdownQt)
 set_target_properties(MarkdownQt PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(MarkdownQt PROPERTIES SOVERSION ${MARKDOWNQT_VERSION_MAJOR})
 
@@ -94,7 +95,7 @@ target_compile_options(MarkdownQt PRIVATE -Wall)
 # install public header
 install(
     DIRECTORY include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/markdown-qt
 )
 
 # install library
@@ -123,7 +124,7 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/MarkdownQtConfig.cmake"
 # install targets cmake-files
 install(EXPORT MarkdownQtExport
     FILE MarkdownQtTargets.cmake
-    NAMESPACE MarkdownQt
+    NAMESPACE MarkdownQt::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MarkdownQt
 )
 
