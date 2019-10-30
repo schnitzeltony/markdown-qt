@@ -65,7 +65,7 @@ add_library(MarkdownQt
 set_target_properties(MarkdownQt PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(MarkdownQt PROPERTIES SOVERSION ${MARKDOWNQT_VERSION_MAJOR})
 
-# some target magic
+# some target magic added by qtcreator
 target_compile_definitions(MarkdownQt PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 
 # dependencies
