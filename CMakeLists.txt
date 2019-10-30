@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(libmarkdownqt LANGUAGES C CXX)
+project(libmarkdown-qt LANGUAGES C CXX)
 set(MARKDOWNQT_VERSION_MAJOR "0")
 set(MARKDOWNQT_VERSION_MINOR "0")
 set(MARKDOWNQT_VERSION_PATCH "1")
