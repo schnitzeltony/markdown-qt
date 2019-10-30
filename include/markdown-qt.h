@@ -2,12 +2,14 @@
 #define CMarkDownQt_H
 
 #include <QObject>
+#include "markdownqt_export.h"
+
 QT_BEGIN_NAMESPACE
 class QQmlEngine;
 class QJSEngine;
 QT_END_NAMESPACE
 
-class CMarkDownQt : public QObject
+class MARKDOWNQT_EXPORT CMarkDownQt : public QObject
 {
   Q_OBJECT
 public:
@@ -30,7 +32,7 @@ public:
   Q_ENUM(OutputStyle)
 
   /**
-   * @brief Register CMark 1.0 to Qml
+   * @brief Register CMarkDownQt 1.0 to Qml
    * @return return value of qmlRegisterSingletonType
    */
   static int registerQML();

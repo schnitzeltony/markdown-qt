@@ -3,8 +3,9 @@ include(CMakeFindDependencyMacro)
 # Capturing values from configure (optional)
 #set(my-config-var @my-config-var@)
 
-# depenedencies
+# dependencies
 find_dependency(Qt5 COMPONENTS Core Quick REQUIRED)
+find_dependency(PkgConfig)
 
 # cmark pkg-config??
 

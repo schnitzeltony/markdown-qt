@@ -7,7 +7,6 @@ set(MARKDOWNQT_VERSION_PATCH "1")
 
 set(PROJECT_VERSION "${MARKDOWNQT_VERSION_MAJOR}.${MARKDOWNQT_VERSION_MINOR}.${MARKDOWNQT_VERSION_PATCH}")
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
@@ -18,7 +17,7 @@ include(FeatureSummary)
 include(GNUInstallDirs)
 
 # qt5 libs
-find_package(Qt5 COMPONENTS Core Quick REQUIRED)
+find_package(Qt5 COMPONENTS Core Qml CONFIG REQUIRED)
 
 # cmark lib
 find_package(PkgConfig REQUIRED)
@@ -26,7 +25,7 @@ pkg_check_modules(CMARK REQUIRED libcmark>=0.28.3)
 
 # all sources by type
 set(PUBLIC_HEADERS
-    markdown-qt.h
+    include/markdown-qt.h
 )
 
 # find sundown includes
@@ -60,7 +59,7 @@ set(RESOURCES
 # the library
 add_library(MarkdownQt
     SHARED
-        ${SOURCES} ${RESOURCES}
+        ${PUBLIC_HEADERS} ${SOURCES} ${RESOURCES}
 )
 add_library(MarkdownQt::MarkdownQt ALIAS MarkdownQt)
 set_target_properties(MarkdownQt PROPERTIES VERSION ${PROJECT_VERSION})
@@ -69,13 +68,17 @@ set_target_properties(MarkdownQt PROPERTIES SOVERSION ${MARKDOWNQT_VERSION_MAJOR
 # some target magic added by qtcreator
 target_compile_definitions(MarkdownQt PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 
+# header import/export
+include(GenerateExportHeader)
+generate_export_header(MarkdownQt)
+
 # dependencies
 target_link_libraries(MarkdownQt
     PUBLIC
         Qt5::Core
-        Qt5::Quick
+        Qt5::Qml
+        ${CMARK_LIBRARIES}
     PRIVATE
-        ${CMARK}
 )
 
 # tell cmake about public/private headers
@@ -83,6 +86,7 @@ target_include_directories(MarkdownQt
     PUBLIC
         $<INSTALL_INTERFACE:include/markdown-qt>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/sundown/html
         ${CMAKE_CURRENT_SOURCE_DIR}/sundown/src
@@ -92,9 +96,16 @@ target_include_directories(MarkdownQt
 target_compile_features(MarkdownQt PRIVATE cxx_std_11)
 target_compile_options(MarkdownQt PRIVATE -Wall)
 
+# ask linker to help us finding unresolved symbols
+set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+
 # install public header
 install(
     DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/markdown-qt
+)
+install(FILES
+    ${PROJECT_BINARY_DIR}/markdownqt_export.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/markdown-qt
 )
 

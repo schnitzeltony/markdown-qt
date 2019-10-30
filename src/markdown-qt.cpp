@@ -13,7 +13,7 @@ CMarkDownQt::CMarkDownQt(QObject *parent) : QObject(parent)
 
 int CMarkDownQt::registerQML()
 {
-    return qmlRegisterSingletonType<CMarkDownQt>("CMark", 1, 0, "CMark", CMarkDownQt::getQMLInstance);
+    return qmlRegisterSingletonType<CMarkDownQt>("MarkDownQt", 1, 0, "MarkDownQt", CMarkDownQt::getQMLInstance);
 }
 
 QObject *CMarkDownQt::getQMLInstance(QQmlEngine *t_engine, QJSEngine *t_scriptEngine)
