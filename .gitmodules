@@ -4,3 +4,6 @@
 [submodule "sundown"]
 	path = sundown
 	url = https://github.com/vmg/sundown.git
+[submodule "cmark-gfm"]
+	path = cmark-gfm
+	url = https://github.com/github/cmark-gfm.git
