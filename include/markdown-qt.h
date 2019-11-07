@@ -3,10 +3,11 @@
 
 #include "markdownqt_export.h"
 #include <QtPlugin>
+#include <QPluginLoader>
 #include <QList>
 #include <QMap>
 
-// TODO PIMPL...
+// TODO PIMPL !!!!!!
 
 QT_BEGIN_NAMESPACE
 class QQmlEngine;
@@ -42,11 +43,12 @@ class MARKDOWNQT_EXPORT PluginLoaderMdQt
 {
 public:
     PluginLoaderMdQt();
+    ~PluginLoaderMdQt();
 private:
-    typedef struct {
-          QString strLibName;
-          QString strDisplayName;
-          QList<PluginInterfaceMdQt::ConvertType> conversionTypes;
+    typedef struct _PluginInfo{
+        QString strDisplayName;
+        QList<PluginInterfaceMdQt::ConvertType> conversionTypes;
+        QPluginLoader *pluginLoader;
     } PluginInfo;
     // key display string
     QMap<QString, PluginInfo> m_pluginInfoMap;
