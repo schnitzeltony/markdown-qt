@@ -6,10 +6,10 @@ CGithubMarkdownCssPlugin::CGithubMarkdownCssPlugin()
     Q_INIT_RESOURCE(resources);
 }
 
-QList<MdQtPluginInterface::ConvertType> CGithubMarkdownCssPlugin::availableConversion()
+QList<PluginInterfaceMdQt::ConvertType> CGithubMarkdownCssPlugin::availableConversions()
 {
-    QList<MdQtPluginInterface::ConvertType> supported;
-    supported.append({CMarkDownQt::FormatHtml, CMarkDownQt::FormatHtml});
+    QList<PluginInterfaceMdQt::ConvertType> supported;
+    supported.append({FormatHtml, FormatHtml});
     return supported;
 }
 
@@ -21,7 +21,7 @@ QString CGithubMarkdownCssPlugin::displayName()
 bool CGithubMarkdownCssPlugin::convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut)
 {
     bool bSupported = false;
-    if(convertType.inFormat==CMarkDownQt::FormatHtml && convertType.inFormat==CMarkDownQt::FormatHtml) {
+    if(convertType.inFormat==FormatHtml && convertType.inFormat==FormatHtml) {
         strOut = cssHtml(strIn);
     }
     return bSupported;

@@ -4,16 +4,16 @@
 #include <QtPlugin>
 #include "markdown-qt.h"
 
-class CGithubMarkdownCssPlugin : public QObject, public MdQtPluginInterface
+class CGithubMarkdownCssPlugin : public QObject, public PluginInterfaceMdQt
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID MdQtPluginInterface_iid)
-    Q_INTERFACES(MdQtPluginInterface)
+    Q_PLUGIN_METADATA(IID PluginInterfaceMdQt_iid)
+    Q_INTERFACES(PluginInterfaceMdQt)
 
 public:
     CGithubMarkdownCssPlugin();
     ~CGithubMarkdownCssPlugin() override {}
-    virtual QList<ConvertType> availableConversion() override;
+    virtual QList<ConvertType> availableConversions() override;
     virtual QString displayName() override;
     virtual bool convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut) override;
 private:

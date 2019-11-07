@@ -5,10 +5,10 @@
 #include "parser.h"
 #include <QStringList>
 
-QList<MdQtPluginInterface::ConvertType> CMarkGfmPlugin::availableConversion()
+QList<PluginInterfaceMdQt::ConvertType> CMarkGfmPlugin::availableConversions()
 {
-    QList<MdQtPluginInterface::ConvertType> supported;
-    supported.append({CMarkDownQt::FormatMd, CMarkDownQt::FormatHtml});
+    QList<PluginInterfaceMdQt::ConvertType> supported;
+    supported.append({FormatMd, FormatHtml});
     return supported;
 }
 
@@ -20,7 +20,7 @@ QString CMarkGfmPlugin::displayName()
 bool CMarkGfmPlugin::convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut)
 {
     bool bSupported = false;
-    if(convertType.inFormat==CMarkDownQt::FormatMd && convertType.outFormat==CMarkDownQt::FormatHtml) {
+    if(convertType.inFormat==FormatMd && convertType.outFormat==FormatHtml) {
         strOut = convertToHtml(strIn);
     }
     return bSupported;

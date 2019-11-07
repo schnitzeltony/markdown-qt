@@ -4,23 +4,59 @@
 #include "markdownqt_export.h"
 #include <QtPlugin>
 #include <QList>
+#include <QMap>
+
+// TODO PIMPL...
 
 QT_BEGIN_NAMESPACE
 class QQmlEngine;
 class QJSEngine;
 QT_END_NAMESPACE
 
+// plugin interface - for those not interested in QML-wrapper
+class MARKDOWNQT_EXPORT PluginInterfaceMdQt
+{
+public:
+    enum DataFormat {
+      FormatAll = 0,
+      FormatMd = 1,
+      FormatHtml = 2,
+      FormatPdf = 3,
+    };
+    typedef struct {
+        DataFormat inFormat;
+        DataFormat outFormat;
+    } ConvertType;
+
+    virtual ~PluginInterfaceMdQt() {}
+    virtual QList<ConvertType> availableConversions() = 0;
+    virtual QString displayName() = 0;
+    virtual bool convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut) = 0;
+};
+
+#define PluginInterfaceMdQt_iid "markdown.qt.PluginInterfaceMdQt"
+Q_DECLARE_INTERFACE(PluginInterfaceMdQt, PluginInterfaceMdQt_iid)
+
+// plugin loader
+class MARKDOWNQT_EXPORT PluginLoaderMdQt
+{
+public:
+    PluginLoaderMdQt();
+private:
+    typedef struct {
+          QString strLibName;
+          QString strDisplayName;
+          QList<PluginInterfaceMdQt::ConvertType> conversionTypes;
+    } PluginInfo;
+    // key display string
+    QMap<QString, PluginInfo> m_pluginInfoMap;
+};
+
 // our plugin wrapper for use by QML
 class MARKDOWNQT_EXPORT CMarkDownQt : public QObject
 {
   Q_OBJECT
 public:
-  enum DataFormat {
-    FormatMd = 0,
-    FormatHtml = 1,
-    FormatPdf = 2,
-  };
-  Q_ENUM(DataFormat)
 
   enum TreatParam { // TODO remove
     AsString = 0,
@@ -61,24 +97,10 @@ public slots:
 private:
   explicit CMarkDownQt(QObject *parent = nullptr);
   static QObject *getQMLInstance(QQmlEngine *t_engine, QJSEngine *t_scriptEngine);
+
+  PluginLoaderMdQt m_PluginLoader;
 };
 
-// plugin interface - for those not interested in QML-wrapper
-class MARKDOWNQT_EXPORT MdQtPluginInterface
-{
-public:
-    typedef struct {
-        CMarkDownQt::DataFormat inFormat;
-        CMarkDownQt::DataFormat outFormat;
-    } ConvertType;
-    virtual ~MdQtPluginInterface() {}
-    virtual QList<ConvertType> availableConversion() = 0;
-    virtual QString displayName() = 0;
-    virtual bool convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut) = 0;
-};
-
-#define MdQtPluginInterface_iid "markdown.qt.MdQtPluginInterface"
-Q_DECLARE_INTERFACE(MdQtPluginInterface, MdQtPluginInterface_iid)
 
 
 

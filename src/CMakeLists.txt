@@ -1,5 +1,9 @@
 # source related globals
 set(PLUGINPATH ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
+# TODO - don't expect this to work for sysrooted install as oe...
+set(FULL_PLUGIN_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}/)
+
+configure_file(markdown-qt-config.h.in markdown-qt-config.h @ONLY)
 
 # the library
 add_library(MarkdownQt
@@ -23,15 +27,20 @@ install(FILES
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/markdown-qt
 )
 
-# announce global headers
+# announce global headers - build perspective
 include_directories(
     # public header
-    $<INSTALL_INTERFACE:include/markdown-qt>
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
     # generated export header
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     # plugin-interface header
     ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+# announce headers - target perspective
+target_include_directories(MarkdownQt
+    PUBLIC
+        $<INSTALL_INTERFACE:include/markdown-qt>
 )
 
 # compiler options
