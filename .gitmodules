@@ -1,9 +1,9 @@
 [submodule "github-markdown-css"]
-	path = github-markdown-css
+	path = src/plugins/github-markdown-css/github-markdown-css-source
 	url = https://github.com/sindresorhus/github-markdown-css.git
 [submodule "sundown"]
-	path = sundown
+	path = src/plugins/sundown/sundown-source
 	url = https://github.com/vmg/sundown.git
 [submodule "cmark-gfm"]
-	path = cmark-gfm
+	path = src/plugins/cmark-gfm/cmark-gfm-source
 	url = https://github.com/github/cmark-gfm.git

@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>github-markdown-css/github-markdown.css</file>
         <file>styles/common-footer</file>
         <file>styles/common-header</file>
         <file>styles/github-footer</file>
