@@ -1,6 +1,7 @@
 set(CMARK_TESTS OFF CACHE BOOL "Build cmark-gfm tests and enable testing" FORCE)
 set(CMARK_STATIC ON CACHE BOOL "Build static libcmark-gfm library" FORCE)
 set(CMARK_SHARED OFF CACHE BOOL "Build shared libcmark-gfm library" FORCE)
+# EXCLUDE_FROM_ALL: do not install static libs
 add_subdirectory(cmark-gfm-source EXCLUDE_FROM_ALL)
 
 add_library(PluginCmarkGfm
@@ -19,9 +20,8 @@ target_include_directories(PluginCmarkGfm
 )
 
 target_link_libraries(PluginCmarkGfm
-    PUBLIC
-        Qt5::Core
     PRIVATE
+        Qt5::Core
         libcmark-gfm-extensions_static
         libcmark-gfm_static
         # ask linker to help us finding unresolved symbols

@@ -2,7 +2,5 @@
     <qresource prefix="/">
         <file>styles/common-footer</file>
         <file>styles/common-header</file>
-        <file>styles/github-footer</file>
-        <file>styles/github-header</file>
     </qresource>
 </RCC>

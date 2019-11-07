@@ -1,30 +1,18 @@
-# all sources (once support for installed sundown is added this needs change)
-
-set(PUBLIC_HEADERS
-    ${CMAKE_SOURCE_DIR}/include/markdown-qt.h
-)
-
-set(PRIVATE_HEADERS
-)
-
-set(SOURCES
-    markdown-qt.cpp
-)
-
-# md templates as resources
-set(RESOURCES
-    resources.qrc
-)
+# source related globals
+set(PLUGINPATH ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
 
 # the library
 add_library(MarkdownQt
     SHARED
-        ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SOURCES} ${RESOURCES}
+        # just for qtcreator to have it in-tree
+        ${CMAKE_SOURCE_DIR}/include/markdown-qt.h
+        markdown-qt.cpp
+        pluginloader.cpp
+        resources.qrc
 )
 add_library(MarkdownQt::MarkdownQt ALIAS MarkdownQt)
 set_target_properties(MarkdownQt PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(MarkdownQt PROPERTIES SOVERSION ${MARKDOWNQT_VERSION_MAJOR})
-
 
 # export header
 include(GenerateExportHeader)
@@ -35,8 +23,7 @@ install(FILES
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/markdown-qt
 )
 
-
-# tell all about public/private headers
+# announce global headers
 include_directories(
     # public header
     $<INSTALL_INTERFACE:include/markdown-qt>

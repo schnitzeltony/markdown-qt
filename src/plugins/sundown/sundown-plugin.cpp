@@ -17,7 +17,7 @@ QString CSundownPlugin::displayName()
 bool CSundownPlugin::convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut)
 {
     bool bSupported = false;
-    if(convertType.inFormat==CMarkDownQt::FormatMd && convertType.inFormat==CMarkDownQt::FormatMd) {
+    if(convertType.inFormat==CMarkDownQt::FormatMd && convertType.outFormat==CMarkDownQt::FormatHtml) {
         strOut = convertToHtml(strIn);
     }
     return bSupported;

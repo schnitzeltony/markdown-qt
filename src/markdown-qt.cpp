@@ -52,13 +52,11 @@ QString CMarkDownQt::stringToHtml(TreatParam paramAs, const QString &strIn, Conv
     }
 
     // Add style / headers / footers
-    QString strHeaderName, strFooterName, strStyleName, strStyleFooterName;
+    QString strHeaderName, strFooterName;
     switch(outputStyle) {
         case StyleGithub:
             strHeaderName = QStringLiteral(":/styles/github-header");
             strFooterName = QStringLiteral(":/styles/common-footer");
-            strStyleName = QStringLiteral(":/github-markdown-css/github-markdown.css");
-            strStyleFooterName = QStringLiteral(":/styles/github-footer");
             break;
         default:
             strHeaderName = QStringLiteral(":/styles/common-header");
@@ -77,22 +75,10 @@ QString CMarkDownQt::stringToHtml(TreatParam paramAs, const QString &strIn, Conv
         strFooter = fileFooter.readAll();
         fileFooter.close();
     }
-    QString strStyle;
-    QFile fileStyle(strStyleName);
-    if(fileStyle.exists() && fileStyle.open(QFile::ReadOnly | QFile::Unbuffered)) {
-        strStyle = fileStyle.readAll();
-        fileStyle.close();
-    }
-    QString strStyleFooter;
-    QFile fileStyleFooter(strStyleFooterName);
-    if(fileStyleFooter.exists() && fileStyleFooter.open(QFile::ReadOnly | QFile::Unbuffered)) {
-        strStyleFooter = fileStyleFooter.readAll();
-        fileStyleFooter.close();
-    }
     strHtml =
             strHeader +
-            strStyle +
-            strStyleFooter +
+            /*strStyle +
+            strStyleFooter +*/
             strHtml +
             strFooter;
     return strHtml;

@@ -12,9 +12,8 @@ target_include_directories(PluginSundown
 add_dependencies(PluginSundown Sundown)
 
 target_link_libraries(PluginSundown
-    PUBLIC
-        Qt5::Core
     PRIVATE
+        Qt5::Core
         Sundown
         # ask linker to help us finding unresolved symbols
         "-Wl,--no-undefined"
