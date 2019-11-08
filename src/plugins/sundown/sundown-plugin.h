@@ -11,7 +11,7 @@ class CSundownPlugin : public QObject, public PluginInterfaceMdQt
     Q_INTERFACES(PluginInterfaceMdQt)
 
 public:
-    ~CSundownPlugin() override {}
+    ~CSundownPlugin() override;
     virtual QList<ConvertType> availableConversions() override;
     virtual QString displayName() override;
     virtual bool convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut) override;

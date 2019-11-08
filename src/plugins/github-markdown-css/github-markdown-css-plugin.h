@@ -12,10 +12,11 @@ class CGithubMarkdownCssPlugin : public QObject, public PluginInterfaceMdQt
 
 public:
     CGithubMarkdownCssPlugin();
-    ~CGithubMarkdownCssPlugin() override {}
+    ~CGithubMarkdownCssPlugin() override;
     virtual QList<ConvertType> availableConversions() override;
     virtual QString displayName() override;
     virtual bool convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut) override;
+    virtual bool addFraming(CMarkDownQt::DataFormat dataFormat, const QByteArray strIn, QByteArray& strOut) override;
 private:
     QByteArray cssHtml(QByteArray strHtmlIn);
 };

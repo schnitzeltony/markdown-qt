@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>styles/common-footer</file>
-        <file>styles/common-header</file>
+        <file>common-styles/footer</file>
+        <file>common-styles/header</file>
     </qresource>
 </RCC>

@@ -11,7 +11,7 @@ class CMarkGfmPlugin : public QObject, public PluginInterfaceMdQt
     Q_INTERFACES(PluginInterfaceMdQt)
 
 public:
-    ~CMarkGfmPlugin() override {}
+    ~CMarkGfmPlugin() override;
     virtual QList<ConvertType> availableConversions() override;
     virtual QString displayName() override;
     virtual bool convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut) override;

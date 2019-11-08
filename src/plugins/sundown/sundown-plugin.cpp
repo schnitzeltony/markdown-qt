@@ -2,10 +2,15 @@
 #include "sundown-source/html/html.h"
 #include <QStringList>
 
+CSundownPlugin::~CSundownPlugin()
+{
+
+}
+
 QList<PluginInterfaceMdQt::ConvertType> CSundownPlugin::availableConversions()
 {
     QList<PluginInterfaceMdQt::ConvertType> supported;
-    supported.append({FormatMd, FormatHtml});
+    supported.append({CMarkDownQt::FormatMd, CMarkDownQt::FormatHtml});
     return supported;
 }
 
@@ -17,7 +22,8 @@ QString CSundownPlugin::displayName()
 bool CSundownPlugin::convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut)
 {
     bool bSupported = false;
-    if(convertType.inFormat==FormatMd && convertType.outFormat==FormatHtml) {
+    if(convertType.inFormat==CMarkDownQt::FormatMd &&
+            convertType.outFormat==CMarkDownQt::FormatHtml) {
         strOut = convertToHtml(strIn);
     }
     return bSupported;

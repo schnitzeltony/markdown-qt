@@ -24,6 +24,7 @@ target_link_libraries(PluginCmarkGfm
         Qt5::Core
         libcmark-gfm-extensions_static
         libcmark-gfm_static
+        MarkdownQt
         # ask linker to help us finding unresolved symbols
         "-Wl,--no-undefined"
         # hide sundown internal symbols

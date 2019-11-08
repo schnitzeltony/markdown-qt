@@ -12,29 +12,73 @@
 QT_BEGIN_NAMESPACE
 class QQmlEngine;
 class QJSEngine;
+class PluginLoaderMdQt;
 QT_END_NAMESPACE
+
+
+
+// our plugin wrapper for use by QML
+class MARKDOWNQT_EXPORT CMarkDownQt : public QObject
+{
+  Q_OBJECT
+public:
+  enum DataFormat {
+    FormatMd = 0,
+    FormatHtml = 1,
+    FormatPdf = 2,
+
+    FormatUnknown
+  };
+  Q_ENUM(DataFormat)
+  /**
+   * @brief Register CMarkDownQt 1.0 to Qml
+   * @return return value of qmlRegisterSingletonType
+   */
+  static int registerQML();
+
+  /**
+   * @brief Transforms Commonmark to HTML
+   * @param paramAs How to treat str parameter see TreatParam
+   * @param strIn Either Commonmark formatted text or filename or..
+   * @return Text in HTML format
+   */
+  //Q_INVOKABLE QString stringToHtml(TreatParam paramAs, const QString &strIn, OutputStyle outputStyle = StyleDefault);
+
+  Q_INVOKABLE static QStringList availableConverters(DataFormat inFormat, DataFormat outFormat);
+
+  Q_INVOKABLE static QString doConvert(QString strIn, QString strPlugin, DataFormat inFormat, DataFormat outFormat);
+
+  Q_INVOKABLE static QString addFraming(QString strIn, QString strPlugin, DataFormat dataFormat);
+
+
+signals:
+
+public slots:
+
+private:
+  explicit CMarkDownQt(QObject *parent = nullptr);
+  static QObject *getQMLInstance(QQmlEngine *t_engine, QJSEngine *t_scriptEngine);
+
+  static PluginLoaderMdQt m_PluginLoader;
+};
 
 // plugin interface - for those not interested in QML-wrapper
 class MARKDOWNQT_EXPORT PluginInterfaceMdQt
 {
 public:
-    enum DataFormat {
-      FormatMd = 0,
-      FormatHtml = 1,
-      FormatPdf = 2,
-    };
     typedef struct _ConvertType{
-        DataFormat inFormat;
-        DataFormat outFormat;
+        CMarkDownQt::DataFormat inFormat;
+        CMarkDownQt::DataFormat outFormat;
         bool operator==(const _ConvertType& other) const {
             return inFormat == other.inFormat && outFormat == other.outFormat;
         }
     } ConvertType;
 
-    virtual ~PluginInterfaceMdQt() {}
+    virtual ~PluginInterfaceMdQt();
     virtual QList<ConvertType> availableConversions() = 0;
     virtual QString displayName() = 0;
     virtual bool convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut) = 0;
+    virtual bool addFraming(CMarkDownQt::DataFormat dataFormat, const QByteArray strIn, QByteArray& strOut);
 };
 
 #define PluginInterfaceMdQt_iid "markdown.qt.PluginInterfaceMdQt"
@@ -59,54 +103,6 @@ private:
     QMap<QString, PluginInfo> m_pluginInfoMap;
 };
 
-// our plugin wrapper for use by QML
-class MARKDOWNQT_EXPORT CMarkDownQt : public QObject
-{
-  Q_OBJECT
-public:
-
-  enum TreatParam { // TODO remove
-    AsString = 0,
-    AsFilename = 1,
-  };
-  Q_ENUM(TreatParam)
-
-  enum ConvertType { // TODO remove
-    ConvertCmark = 0,
-    ConvertSundown = 1,
-  };
-  Q_ENUM(ConvertType)
-
-  enum OutputStyle {
-    StyleDefault = 0,
-    StyleGithub = 1,
-  };
-  Q_ENUM(OutputStyle)
-
-  /**
-   * @brief Register CMarkDownQt 1.0 to Qml
-   * @return return value of qmlRegisterSingletonType
-   */
-  static int registerQML();
-
-  /**
-   * @brief Transforms Commonmark to HTML
-   * @param paramAs How to treat str parameter see TreatParam
-   * @param strIn Either Commonmark formatted text or filename or..
-   * @return Text in HTML format
-   */
-  Q_INVOKABLE static QString stringToHtml(TreatParam paramAs, const QString &strIn, ConvertType convertType = ConvertCmark, OutputStyle outputStyle = StyleDefault);
-
-signals:
-
-public slots:
-
-private:
-  explicit CMarkDownQt(QObject *parent = nullptr);
-  static QObject *getQMLInstance(QQmlEngine *t_engine, QJSEngine *t_scriptEngine);
-
-  PluginLoaderMdQt m_PluginLoader;
-};
 
 
 

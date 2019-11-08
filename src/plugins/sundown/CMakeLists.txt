@@ -15,6 +15,7 @@ target_link_libraries(PluginSundown
     PRIVATE
         Qt5::Core
         Sundown
+        MarkdownQt
         # ask linker to help us finding unresolved symbols
         "-Wl,--no-undefined"
         # hide sundown internal symbols

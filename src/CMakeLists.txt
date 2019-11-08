@@ -8,10 +8,11 @@ configure_file(markdown-qt-config.h.in markdown-qt-config.h @ONLY)
 # the library
 add_library(MarkdownQt
     SHARED
-        # just for qtcreator to have it in-tree
+        # for moc & qtcreator to have it in-tree
         ${CMAKE_SOURCE_DIR}/include/markdown-qt.h
         markdown-qt.cpp
         pluginloader.cpp
+        plugininterface.cpp
         resources.qrc
 )
 add_library(MarkdownQt::MarkdownQt ALIAS MarkdownQt)

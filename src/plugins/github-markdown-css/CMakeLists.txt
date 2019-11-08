@@ -8,6 +8,7 @@ add_library(PluginGithubMarkdownCss
 target_link_libraries(PluginGithubMarkdownCss
     PRIVATE
         Qt5::Core
+        MarkdownQt
 )
 
 install(TARGETS PluginGithubMarkdownCss DESTINATION ${PLUGINPATH})
