@@ -19,14 +19,16 @@ class MARKDOWNQT_EXPORT PluginInterfaceMdQt
 {
 public:
     enum DataFormat {
-      FormatAll = 0,
-      FormatMd = 1,
-      FormatHtml = 2,
-      FormatPdf = 3,
+      FormatMd = 0,
+      FormatHtml = 1,
+      FormatPdf = 2,
     };
-    typedef struct {
+    typedef struct _ConvertType{
         DataFormat inFormat;
         DataFormat outFormat;
+        bool operator==(const _ConvertType& other) const {
+            return inFormat == other.inFormat && outFormat == other.outFormat;
+        }
     } ConvertType;
 
     virtual ~PluginInterfaceMdQt() {}
@@ -44,6 +46,9 @@ class MARKDOWNQT_EXPORT PluginLoaderMdQt
 public:
     PluginLoaderMdQt();
     ~PluginLoaderMdQt();
+    QStringList listAvailable(const PluginInterfaceMdQt::ConvertType convertType);
+    PluginInterfaceMdQt *load(const QString strDisplayName);
+    bool unload(const QString strDisplayName);
 private:
     typedef struct _PluginInfo{
         QString strDisplayName;

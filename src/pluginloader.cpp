@@ -55,3 +55,37 @@ PluginLoaderMdQt::~PluginLoaderMdQt()
         delete infoEntry.pluginLoader;
     }
 }
+
+QStringList PluginLoaderMdQt::listAvailable(const PluginInterfaceMdQt::ConvertType convertType)
+{
+    QStringList pluginNames;
+    for(auto infoEntry : m_pluginInfoMap) {
+        for(auto convertTypeSupported : infoEntry.conversionTypes) {
+            if(convertTypeSupported == convertType) {
+                pluginNames.append(infoEntry.strDisplayName);
+                break;
+            }
+        }
+    }
+    return pluginNames;
+}
+
+PluginInterfaceMdQt *PluginLoaderMdQt::load(const QString strDisplayName)
+{
+    PluginInterfaceMdQt *plugin = nullptr;
+    if(m_pluginInfoMap.contains(strDisplayName)) {
+        auto pluginInfo = m_pluginInfoMap[strDisplayName];
+        plugin = qobject_cast<PluginInterfaceMdQt* >(pluginInfo.pluginLoader->instance());
+    }
+    return plugin;
+}
+
+bool PluginLoaderMdQt::unload(const QString strDisplayName)
+{
+    bool bUnloaded = false;
+    if(m_pluginInfoMap.contains(strDisplayName)) {
+        auto pluginInfo = m_pluginInfoMap[strDisplayName];
+        bUnloaded = pluginInfo.pluginLoader->unload();
+    }
+    return bUnloaded;
+}
