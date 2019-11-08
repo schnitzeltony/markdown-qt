@@ -1,5 +1,5 @@
 add_library(PluginSundown
-    SHARED
+    MODULE
         sundown-plugin.h
         sundown-plugin.cpp
 )

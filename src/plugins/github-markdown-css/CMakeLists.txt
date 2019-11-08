@@ -1,5 +1,5 @@
 add_library(PluginGithubMarkdownCss
-    SHARED
+    MODULE
         github-markdown-css-plugin.h
         github-markdown-css-plugin.cpp
         resources.qrc

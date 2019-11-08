@@ -5,7 +5,7 @@ set(CMARK_SHARED OFF CACHE BOOL "Build shared libcmark-gfm library" FORCE)
 add_subdirectory(cmark-gfm-source EXCLUDE_FROM_ALL)
 
 add_library(PluginCmarkGfm
-    SHARED
+    MODULE
         cmark-gfm-plugin.h
         cmark-gfm-plugin.cpp
 )
