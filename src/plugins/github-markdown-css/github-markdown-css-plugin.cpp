@@ -3,7 +3,7 @@
 
 CGithubMarkdownCssPlugin::CGithubMarkdownCssPlugin()
 {
-    Q_INIT_RESOURCE(resources);
+    Q_INIT_RESOURCE(github_markdown_css);
 }
 
 CGithubMarkdownCssPlugin::~CGithubMarkdownCssPlugin()
@@ -58,7 +58,7 @@ bool CGithubMarkdownCssPlugin::addFraming(CMarkDownQt::DataFormat dataFormat, co
 QByteArray CGithubMarkdownCssPlugin::cssHtml(QByteArray strHtmlIn)
 {
     QByteArray strHtmlOut;
-    QString strStyleName = QStringLiteral(":/github-markdown-css/github-markdown.css");
+    QString strStyleName = QStringLiteral(":/github-markdown-css-source/github-markdown.css");
     QString strStyleFooterName = QStringLiteral(":/github-styles/footer");
     QByteArray strStyle;
     QFile fileStyle(strStyleName);

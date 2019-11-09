@@ -2,7 +2,7 @@ add_library(PluginGithubMarkdownCss
     MODULE
         github-markdown-css-plugin.h
         github-markdown-css-plugin.cpp
-        resources.qrc
+        github_markdown_css.qrc
 )
 
 target_link_libraries(PluginGithubMarkdownCss
