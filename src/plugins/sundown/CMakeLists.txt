@@ -18,8 +18,6 @@ target_link_libraries(PluginSundown
         MarkdownQt
         # ask linker to help us finding unresolved symbols
         "-Wl,--no-undefined"
-        # hide sundown internal symbols
-        "-Wl,--exclude-libs,ALL"
 )
 
 install(TARGETS PluginSundown DESTINATION ${PLUGINPATH})

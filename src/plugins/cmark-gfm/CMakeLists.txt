@@ -27,8 +27,6 @@ target_link_libraries(PluginCmarkGfm
         MarkdownQt
         # ask linker to help us finding unresolved symbols
         "-Wl,--no-undefined"
-        # hide sundown internal symbols
-        "-Wl,--exclude-libs,ALL"
 )
 
 install(TARGETS PluginCmarkGfm DESTINATION ${PLUGINPATH})
