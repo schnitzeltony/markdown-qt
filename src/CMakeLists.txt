@@ -1,6 +1,5 @@
 # source related globals
 set(PLUGINPATH ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
-# TODO - don't expect this to work for sysrooted install as oe...
 set(FULL_PLUGIN_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}/)
 
 configure_file(markdown-qt-config.h.in markdown-qt-config.h @ONLY)
