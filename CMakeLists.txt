@@ -13,6 +13,14 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# plugin options
+option(BUILD_CMARK_PLUGIN "Build cmark plugin" ON)
+option(BUILD_CMARK_GFM_PLUGIN "Build cmark-gfm plugin" ON)
+option(BUILD_DUMMY_PLUGIN "Build dummy plugin" ON)
+option(BUILD_HOEDOWN_PLUGIN "Build hoedown plugin" ON)
+option(BUILD_SUNDOWN_PLUGIN "Build sundown plugin" OFF)
+
+
 # cmake macros
 include(FeatureSummary)
 include(GNUInstallDirs)
