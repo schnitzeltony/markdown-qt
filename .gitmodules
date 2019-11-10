@@ -7,3 +7,6 @@
 [submodule "cmark-gfm"]
 	path = src/plugins/cmark-gfm/cmark-gfm-source
 	url = https://github.com/github/cmark-gfm.git
+[submodule "src/plugins/hoedown/hoedown-source"]
+	path = src/plugins/hoedown/hoedown-source
+	url = https://github.com/hoedown/hoedown.git
