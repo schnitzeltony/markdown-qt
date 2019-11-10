@@ -8,8 +8,11 @@ CDummyPlugin::~CDummyPlugin()
 QList<PluginInterfaceMdQt::ConvertType> CDummyPlugin::availableConversions()
 {
     QList<PluginInterfaceMdQt::ConvertType> supported;
-    // maybe more later
-    supported.append({CMarkDownQt::FormatMd, CMarkDownQt::FormatHtml});
+    for(auto inFormat : validDataFormats) {
+        for(auto outFormat : validDataFormats) {
+            supported.append({inFormat, outFormat});
+        }
+    }
     return supported;
 }
 

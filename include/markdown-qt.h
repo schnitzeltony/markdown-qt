@@ -15,8 +15,6 @@ class QJSEngine;
 class PluginLoaderMdQt;
 QT_END_NAMESPACE
 
-
-
 // our plugin wrapper for use by QML
 class MARKDOWNQT_EXPORT CMarkDownQt : public QObject
 {
@@ -27,10 +25,11 @@ public:
     FormatHtml = 1,
     FormatPdf = 2,
 
-    FormatUnknown
+    FormatUnknown // don't forget to update validDataFormats below
   };
   Q_ENUM(DataFormat)
-  /**
+
+   /**
    * @brief Register CMarkDownQt 1.0 to Qml
    * @return return value of qmlRegisterSingletonType
    */
@@ -61,6 +60,15 @@ private:
 
   static PluginLoaderMdQt m_PluginLoader;
 };
+
+// hmm should be member of CMarkDownQt..
+constexpr std::initializer_list<CMarkDownQt::DataFormat> validDataFormats =
+ {
+     CMarkDownQt::FormatMd,
+     CMarkDownQt::FormatHtml,
+     CMarkDownQt::FormatPdf
+ };
+
 
 // plugin interface - for those not interested in QML-wrapper
 class MARKDOWNQT_EXPORT PluginInterfaceMdQt
