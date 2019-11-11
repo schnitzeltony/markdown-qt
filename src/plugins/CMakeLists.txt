@@ -12,6 +12,10 @@ endif(BUILD_DUMMY_PLUGIN)
 
 add_subdirectory(github-markdown-css)
 
+if(BUILD_GITHUB_ONLINE_PLUGIN)
+add_subdirectory(github-online)
+endif(BUILD_GITHUB_ONLINE_PLUGIN)
+
 if(BUILD_HOEDOWN_PLUGIN)
 add_subdirectory(hoedown)
 endif(BUILD_HOEDOWN_PLUGIN)
