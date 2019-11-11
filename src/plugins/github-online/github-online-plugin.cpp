@@ -34,17 +34,17 @@ bool CGithubOnlinePlugin::convert(ConvertType convertType, const QByteArray strI
 QByteArray CGithubOnlinePlugin::convertToHtml(QByteArray strMarkDownUtf8)
 {
     QByteArray strHtml;
-
     if(strMarkDownUtf8.count() > 0) {
         QUrl serviceUrl = QUrl("https://api.github.com/markdown");
         QNetworkRequest request(serviceUrl);
+        request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/x-www-form-urlencoded"));
         QJsonObject json;
         json.insert("text", QString::fromUtf8(strMarkDownUtf8));
         json.insert("mode", QStringLiteral("gfm"));
         // TODO context -> yes we need an option system
 
         QNetworkAccessManager networkManager;
-        networkManager.post(request,QJsonDocument(json).toJson());
+        networkManager.post(request, QJsonDocument(json).toJson());
         QEventLoop loop;
         connect(&networkManager, &QNetworkAccessManager::finished, [&](QNetworkReply *reply) {
             strHtml = reply->readAll();
