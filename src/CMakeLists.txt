@@ -11,6 +11,7 @@ add_library(MarkdownQt
         ${CMAKE_SOURCE_DIR}/include/markdown-qt.h
         chtmlhelper.h
         markdown-qt.cpp
+        pluginloader_p.h
         pluginloader.cpp
         plugininterface.cpp
         chtmlhelper.cpp

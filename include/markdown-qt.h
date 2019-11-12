@@ -93,26 +93,20 @@ public:
 Q_DECLARE_INTERFACE(PluginInterfaceMdQt, PluginInterfaceMdQt_iid)
 
 // plugin loader
+class PluginLoaderMdQtPrivate;
 class MARKDOWNQT_EXPORT PluginLoaderMdQt
 {
 public:
     PluginLoaderMdQt();
     ~PluginLoaderMdQt();
+
     QStringList listAvailable(const PluginInterfaceMdQt::ConvertType convertType);
     PluginInterfaceMdQt *load(const QString strDisplayName);
     bool unload(const QString strDisplayName);
 private:
-    typedef struct _PluginInfo{
-        QString strDisplayName;
-        QList<PluginInterfaceMdQt::ConvertType> conversionTypes;
-        QPluginLoader *pluginLoader;
-    } PluginInfo;
-    // key display string
-    QMap<QString, PluginInfo> m_pluginInfoMap;
+    PluginLoaderMdQtPrivate *d_ptr;
+    Q_DECLARE_PRIVATE(PluginLoaderMdQt)
 };
-
-
-
 
 
 #endif // CMarkDownQt_H
