@@ -32,8 +32,7 @@ bool CHoedownPlugin::convert(ConvertType convertType, const QByteArray strIn, QB
 QByteArray CHoedownPlugin::convertToHtml(QByteArray strMarkDownUtf8)
 {
     QByteArray strHtml;
-    if(strMarkDownUtf8.size() > 0)
-    {
+    if(strMarkDownUtf8.size() > 0) {
         hoedown_buffer *ib, *ob;
         hoedown_renderer *renderer = nullptr;
         void (*renderer_free)(hoedown_renderer *) = nullptr;

@@ -32,8 +32,7 @@ bool CSundownPlugin::convert(ConvertType convertType, const QByteArray strIn, QB
 QByteArray CSundownPlugin::convertToHtml(QByteArray strMarkDownUtf8)
 {
     QByteArray strHtml;
-    if(strMarkDownUtf8.size() > 0)
-    {
+    if(strMarkDownUtf8.size() > 0) {
         struct sd_callbacks callbacks;
         struct html_renderopt options;
         struct sd_markdown *markdown;
