@@ -21,6 +21,9 @@ option(BUILD_GITHUB_ONLINE_PLUGIN "Build github-online plugin" ON)
 option(BUILD_HOEDOWN_PLUGIN "Build hoedown plugin" OFF)
 option(BUILD_SUNDOWN_PLUGIN "Build sundown plugin" OFF)
 
+# keep this just in case we get back to wkhtmltopdf or need other libs
+# without build-system support
+#set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_SOURCE_DIR}/cmake")
 
 # cmake macros
 include(FeatureSummary)
