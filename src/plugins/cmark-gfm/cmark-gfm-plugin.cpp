@@ -35,7 +35,7 @@ bool CMarkGfmPlugin::convert(ConvertType convertType, const QByteArray strIn, QB
 
 QByteArray CMarkGfmPlugin::convertToHtml(QByteArray strMarkDownUtf8)
 {
-    int options = CMARK_OPT_UNSAFE | CMARK_OPT_LIBERAL_HTML_TAG | CMARK_OPT_GITHUB_PRE_LANG | CMARK_OPT_FULL_INFO_STRING; /* TODO options for plugins */
+    int options = CMARK_OPT_UNSAFE | CMARK_OPT_LIBERAL_HTML_TAG | /*CMARK_OPT_GITHUB_PRE_LANG |*/ CMARK_OPT_FULL_INFO_STRING; /* TODO options for plugins */
     cmark_gfm_core_extensions_ensure_registered();
     cmark_parser *parser = cmark_parser_new_with_mem(options, cmark_get_arena_mem_allocator());
     QByteArray strHtml;
