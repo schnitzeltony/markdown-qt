@@ -68,17 +68,3 @@ QByteArray CMarkDownQt::addFraming(QString pluginName, DataFormat dataFormat, QB
     return dataOut;
 }
 
-QByteArray CMarkDownQt::strToUtf8Data(QString strIn)
-{
-    return strIn.toUtf8();
-}
-
-QString CMarkDownQt::utf8DataToStr(QByteArray dataIn)
-{
-    return QString::fromUtf8(dataIn);
-}
-
-bool CMarkDownQt::pathExists(QString strPath)
-{
-    return QDir(strPath).exists();
-}
