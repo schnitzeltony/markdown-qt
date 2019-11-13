@@ -5,11 +5,11 @@ PluginInterfaceMdQt::~PluginInterfaceMdQt()
 {
 }
 
-bool PluginInterfaceMdQt::addFraming(CMarkDownQt::DataFormat dataFormat, const QByteArray strIn, QByteArray& strOut)
+bool PluginInterfaceMdQt::addFraming(CMarkDownQt::DataFormat dataFormat, const QByteArray dataIn, QByteArray& dataOut)
 {
     // we are the base class and implement a default implementation
     bool bConverted = false;
-    if(dataFormat == CMarkDownQt::FormatHtml) {
+    if(dataFormat == CMarkDownQt::FormatHtmlUtf8) {
         QByteArray strHeader;
         QFile fileHeader(QStringLiteral(":/common-styles/header"));
         if(fileHeader.exists() && fileHeader.open(QFile::ReadOnly | QFile::Unbuffered)) {
@@ -22,7 +22,7 @@ bool PluginInterfaceMdQt::addFraming(CMarkDownQt::DataFormat dataFormat, const Q
             strFooter = fileFooter.readAll();
             fileFooter.close();
         }
-        strOut = strHeader + strIn + strFooter;
+        dataOut = strHeader + dataIn + strFooter;
         bConverted = true;
     }
     return bConverted;

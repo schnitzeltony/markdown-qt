@@ -12,7 +12,7 @@ CGithubOnlinePlugin::~CGithubOnlinePlugin()
 QList<PluginInterfaceMdQt::ConvertType> CGithubOnlinePlugin::availableConversions()
 {
     QList<PluginInterfaceMdQt::ConvertType> supported;
-    supported.append({CMarkDownQt::FormatMd, CMarkDownQt::FormatHtml});
+    supported.append({CMarkDownQt::FormatMdUtf8, CMarkDownQt::FormatHtmlUtf8});
     return supported;
 }
 
@@ -21,12 +21,12 @@ QString CGithubOnlinePlugin::displayName()
     return QStringLiteral("github-online");
 }
 
-bool CGithubOnlinePlugin::convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut)
+bool CGithubOnlinePlugin::convert(ConvertType convertType, const QByteArray dataIn, QByteArray& dataOut)
 {
     bool bSupported = false;
-    if(convertType.inFormat==CMarkDownQt::FormatMd &&
-            convertType.outFormat==CMarkDownQt::FormatHtml) {
-        strOut = convertToHtml(strIn);
+    if(convertType.inFormat==CMarkDownQt::FormatMdUtf8 &&
+            convertType.outFormat==CMarkDownQt::FormatHtmlUtf8) {
+        dataOut = convertToHtml(dataIn);
     }
     return bSupported;
 }

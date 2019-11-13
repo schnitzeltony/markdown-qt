@@ -13,7 +13,7 @@ CGithubMarkdownCssPlugin::~CGithubMarkdownCssPlugin()
 QList<PluginInterfaceMdQt::ConvertType> CGithubMarkdownCssPlugin::availableConversions()
 {
     QList<PluginInterfaceMdQt::ConvertType> supported;
-    supported.append({CMarkDownQt::FormatHtml, CMarkDownQt::FormatHtml});
+    supported.append({CMarkDownQt::FormatHtmlUtf8, CMarkDownQt::FormatHtmlUtf8});
     return supported;
 }
 
@@ -22,20 +22,20 @@ QString CGithubMarkdownCssPlugin::displayName()
     return QStringLiteral("github-markdown-css");
 }
 
-bool CGithubMarkdownCssPlugin::convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut)
+bool CGithubMarkdownCssPlugin::convert(ConvertType convertType, const QByteArray dataIn, QByteArray& dataOut)
 {
     bool bSupported = false;
-    if(convertType.inFormat==CMarkDownQt::FormatHtml &&
-            convertType.inFormat==CMarkDownQt::FormatHtml) {
-        strOut = cssHtml(strIn);
+    if(convertType.inFormat==CMarkDownQt::FormatHtmlUtf8 &&
+            convertType.inFormat==CMarkDownQt::FormatHtmlUtf8) {
+        dataOut = cssHtml(dataIn);
     }
     return bSupported;
 }
 
-bool CGithubMarkdownCssPlugin::addFraming(CMarkDownQt::DataFormat dataFormat, const QByteArray strIn, QByteArray& strOut)
+bool CGithubMarkdownCssPlugin::addFraming(CMarkDownQt::DataFormat dataFormat, const QByteArray dataIn, QByteArray& dataOut)
 {
     bool bConverted = false;
-    if(dataFormat == CMarkDownQt::FormatHtml) {
+    if(dataFormat == CMarkDownQt::FormatHtmlUtf8) {
         QByteArray strHeader;
         QFile fileHeader(QStringLiteral(":/github-styles/header"));
         if(fileHeader.exists() && fileHeader.open(QFile::ReadOnly | QFile::Unbuffered)) {
@@ -48,7 +48,7 @@ bool CGithubMarkdownCssPlugin::addFraming(CMarkDownQt::DataFormat dataFormat, co
             strFooter = fileFooter.readAll();
             fileFooter.close();
         }
-        strOut = strHeader + strIn + strFooter;
+        dataOut = strHeader + dataIn + strFooter;
         bConverted = true;
     }
     return bConverted;

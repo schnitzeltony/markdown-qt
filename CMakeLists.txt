@@ -18,9 +18,9 @@ option(BUILD_CMARK_PLUGIN "Build cmark plugin" ON)
 option(BUILD_CMARK_GFM_PLUGIN "Build cmark-gfm plugin" ON)
 option(BUILD_DUMMY_PLUGIN "Build dummy plugin" ON)
 option(BUILD_GITHUB_ONLINE_PLUGIN "Build github-online plugin" ON)
-option(BUILD_HOEDOWN_PLUGIN "Build hoedown plugin" OFF)
+option(BUILD_HOEDOWN_PLUGIN "Build hoedown plugin" ON)
 option(BUILD_QTWEBENGINEPDF_PLUGIN "Build qtwebenginepdf plugin" ON)
-option(BUILD_SUNDOWN_PLUGIN "Build sundown plugin" OFF)
+option(BUILD_SUNDOWN_PLUGIN "Build sundown plugin" ON)
 
 # keep this just in case we get back to wkhtmltopdf or need other libs
 # without build-system support

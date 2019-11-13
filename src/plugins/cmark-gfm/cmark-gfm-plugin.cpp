@@ -14,7 +14,7 @@ CMarkGfmPlugin::~CMarkGfmPlugin()
 QList<PluginInterfaceMdQt::ConvertType> CMarkGfmPlugin::availableConversions()
 {
     QList<PluginInterfaceMdQt::ConvertType> supported;
-    supported.append({CMarkDownQt::FormatMd, CMarkDownQt::FormatHtml});
+    supported.append({CMarkDownQt::FormatMdUtf8, CMarkDownQt::FormatHtmlUtf8});
     return supported;
 }
 
@@ -23,12 +23,12 @@ QString CMarkGfmPlugin::displayName()
     return QStringLiteral("cmark-gfm");
 }
 
-bool CMarkGfmPlugin::convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut)
+bool CMarkGfmPlugin::convert(ConvertType convertType, const QByteArray dataIn, QByteArray& dataOut)
 {
     bool bSupported = false;
-    if(convertType.inFormat==CMarkDownQt::FormatMd &&
-            convertType.outFormat==CMarkDownQt::FormatHtml) {
-        strOut = convertToHtml(strIn);
+    if(convertType.inFormat==CMarkDownQt::FormatMdUtf8 &&
+            convertType.outFormat==CMarkDownQt::FormatHtmlUtf8) {
+        dataOut = convertToHtml(dataIn);
     }
     return bSupported;
 }

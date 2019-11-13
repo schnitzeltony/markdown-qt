@@ -28,30 +28,26 @@ QStringList CMarkDownQt::availableConverters(DataFormat inFormat, DataFormat out
     return m_PluginLoader.listAvailable(convertType);
 }
 
-QString CMarkDownQt::convert(QString pluginName, CMarkDownQt::DataFormat inFormat, CMarkDownQt::DataFormat outFormat, QString strIn)
+QByteArray CMarkDownQt::convert(QString pluginName, DataFormat inFormat, DataFormat outFormat, QByteArray dataIn)
 {
-    QString strConverted;
+    QByteArray dataOut;
     PluginInterfaceMdQt *interface = m_PluginLoader.load(pluginName);
     if(interface) {
         PluginInterfaceMdQt::ConvertType convertType = {inFormat, outFormat};
-        QByteArray inData = strIn.toUtf8();
-        QByteArray outData;
-        interface->convert(convertType, inData, outData);
-        strConverted = QString::fromUtf8(outData);
+        interface->convert(convertType, dataIn, dataOut);
     }
-    return strConverted;
+    return dataOut;
 }
 
-bool CMarkDownQt::convertToFile(QString pluginName, DataFormat inFormat, DataFormat outFormat, QString strIn, QString strFileOut)
+bool CMarkDownQt::convertToFile(QString pluginName, DataFormat inFormat, DataFormat outFormat, QByteArray dataIn, QString strFileOut)
 {
-    QString strConverted = convert(pluginName, inFormat, outFormat, strIn);
+    QByteArray dataOut = convert(pluginName, inFormat, outFormat, dataIn);
     bool bFileWritten = false;
-    if(!strConverted.isEmpty()) {
-        QByteArray dataWrite = strConverted.toUtf8();
+    if(!dataOut.isEmpty()) {
         strFileOut = strFileOut.replace("file://", "");
         QFile file(strFileOut);
         if (file.open(QIODevice::WriteOnly)) {
-            bFileWritten = file.write(dataWrite) > 0;
+            bFileWritten = file.write(dataOut) > 0;
             file.close();
         }
         else {
@@ -61,17 +57,22 @@ bool CMarkDownQt::convertToFile(QString pluginName, DataFormat inFormat, DataFor
     return bFileWritten;
 }
 
-QString CMarkDownQt::addFraming(QString pluginName, DataFormat dataFormat, QString strIn)
+QByteArray CMarkDownQt::addFraming(QString pluginName, DataFormat dataFormat, QByteArray dataIn)
 {
-    QString strConverted;
+    QByteArray dataOut;
     PluginInterfaceMdQt *interface = m_PluginLoader.load(pluginName);
     if(interface) {
-        QByteArray inData = strIn.toUtf8();
-        QByteArray outData;
-        interface->addFraming(dataFormat, inData, outData);
-        strConverted = QString::fromUtf8(outData);
+        interface->addFraming(dataFormat, dataIn, dataOut);
     }
-    return strConverted;
+    return dataOut;
 }
 
+QByteArray CMarkDownQt::strToUtf8Data(QString strIn)
+{
+    return strIn.toUtf8();
+}
 
+QString CMarkDownQt::utf8DataToStr(QByteArray dataIn)
+{
+    return QString::fromUtf8(dataIn);
+}

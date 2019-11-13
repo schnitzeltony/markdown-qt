@@ -21,9 +21,9 @@ QString CDummyPlugin::displayName()
     return QStringLiteral("dummy");
 }
 
-bool CDummyPlugin::convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut)
+bool CDummyPlugin::convert(ConvertType convertType, const QByteArray dataIn, QByteArray& dataOut)
 {
     Q_UNUSED(convertType)
-    strOut = strIn;
+    dataOut = dataIn;
     return true;
 }

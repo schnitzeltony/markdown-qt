@@ -21,7 +21,7 @@ CQtWebEnginePdfPlugin::~CQtWebEnginePdfPlugin()
 QList<PluginInterfaceMdQt::ConvertType> CQtWebEnginePdfPlugin::availableConversions()
 {
     QList<PluginInterfaceMdQt::ConvertType> supported;
-    supported.append({CMarkDownQt::FormatHtml, CMarkDownQt::FormatPdf});
+    supported.append({CMarkDownQt::FormatHtmlUtf8, CMarkDownQt::FormatPdfBin});
     return supported;
 }
 
@@ -30,12 +30,12 @@ QString CQtWebEnginePdfPlugin::displayName()
     return QStringLiteral("qtwebenginepdf");
 }
 
-bool CQtWebEnginePdfPlugin::convert(ConvertType convertType, const QByteArray strIn, QByteArray& strOut)
+bool CQtWebEnginePdfPlugin::convert(ConvertType convertType, const QByteArray dataIn, QByteArray& dataOut)
 {
     bool bSupported = false;
-    if(convertType.inFormat==CMarkDownQt::FormatHtml &&
-            convertType.outFormat==CMarkDownQt::FormatPdf) {
-        strOut = convertToPdf(strIn);
+    if(convertType.inFormat==CMarkDownQt::FormatHtmlUtf8 &&
+            convertType.outFormat==CMarkDownQt::FormatPdfBin) {
+        dataOut = convertToPdf(dataIn);
     }
     return bSupported;
 }
