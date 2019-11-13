@@ -35,6 +35,13 @@ else()
     message("Not building hoedown-plugin")
 endif(BUILD_HOEDOWN_PLUGIN)
 
+if(BUILD_QTWEBENGINEPDF_PLUGIN)
+    add_subdirectory(qtwebenginepdf)
+    message("Building qtwebenginepdf-plugin")
+else()
+    message("Not building qtwebenginepdf-plugin")
+endif(BUILD_QTWEBENGINEPDF_PLUGIN)
+
 if(BUILD_SUNDOWN_PLUGIN)
     add_subdirectory(sundown)
     message("Building sundown-plugin")
