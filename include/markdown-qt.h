@@ -73,9 +73,13 @@ public:
    */
   Q_INVOKABLE static QByteArray addFraming(QString pluginName, DataFormat dataFormat, QByteArray dataIn);
 
+  // TODO move to another project / class
   // Helpers (js TextEncoder/TextDecoder are not supported)
   Q_INVOKABLE static QByteArray strToUtf8Data(QString strIn);
   Q_INVOKABLE static QString utf8DataToStr(QByteArray dataIn);
+  // The following are at least easier in Qt
+  Q_INVOKABLE static bool pathExists(QString strPath);
+
 
 signals:
 

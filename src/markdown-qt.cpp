@@ -2,6 +2,7 @@
 #include <QQmlEngine>
 #include <QFile>
 #include <QString>
+#include <QDir>
 
 PluginLoaderMdQt CMarkDownQt::m_PluginLoader = PluginLoaderMdQt();
 
@@ -75,4 +76,9 @@ QByteArray CMarkDownQt::strToUtf8Data(QString strIn)
 QString CMarkDownQt::utf8DataToStr(QByteArray dataIn)
 {
     return QString::fromUtf8(dataIn);
+}
+
+bool CMarkDownQt::pathExists(QString strPath)
+{
+    return QDir(strPath).exists();
 }
