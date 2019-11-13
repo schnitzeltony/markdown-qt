@@ -28,10 +28,10 @@ QStringList CMarkDownQt::availableConverters(DataFormat inFormat, DataFormat out
     return m_PluginLoader.listAvailable(convertType);
 }
 
-QString CMarkDownQt::doConvert(QString strIn, QString strPlugin, CMarkDownQt::DataFormat inFormat, CMarkDownQt::DataFormat outFormat)
+QString CMarkDownQt::convert(QString pluginName, CMarkDownQt::DataFormat inFormat, CMarkDownQt::DataFormat outFormat, QString strIn)
 {
     QString strConverted;
-    PluginInterfaceMdQt *interface = m_PluginLoader.load(strPlugin);
+    PluginInterfaceMdQt *interface = m_PluginLoader.load(pluginName);
     if(interface) {
         PluginInterfaceMdQt::ConvertType convertType = {inFormat, outFormat};
         QByteArray inData = strIn.toUtf8();
@@ -42,10 +42,29 @@ QString CMarkDownQt::doConvert(QString strIn, QString strPlugin, CMarkDownQt::Da
     return strConverted;
 }
 
-QString CMarkDownQt::addFraming(QString strIn, QString strPlugin, DataFormat dataFormat)
+bool CMarkDownQt::convertToFile(QString pluginName, DataFormat inFormat, DataFormat outFormat, QString strIn, QString strFileOut)
+{
+    QString strConverted = convert(pluginName, inFormat, outFormat, strIn);
+    bool bFileWritten = false;
+    if(!strConverted.isEmpty()) {
+        QByteArray dataWrite = strConverted.toUtf8();
+        strFileOut = strFileOut.replace("file://", "");
+        QFile file(strFileOut);
+        if (file.open(QIODevice::WriteOnly)) {
+            bFileWritten = file.write(dataWrite) > 0;
+            file.close();
+        }
+        else {
+            qWarning("Could not open file %s for write!", qPrintable(strFileOut));
+        }
+    }
+    return bFileWritten;
+}
+
+QString CMarkDownQt::addFraming(QString pluginName, DataFormat dataFormat, QString strIn)
 {
     QString strConverted;
-    PluginInterfaceMdQt *interface = m_PluginLoader.load(strPlugin);
+    PluginInterfaceMdQt *interface = m_PluginLoader.load(pluginName);
     if(interface) {
         QByteArray inData = strIn.toUtf8();
         QByteArray outData;

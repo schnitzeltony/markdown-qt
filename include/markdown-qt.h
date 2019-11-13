@@ -36,18 +36,39 @@ public:
   static int registerQML();
 
   /**
-   * @brief Transforms Commonmark to HTML
-   * @param paramAs How to treat str parameter see TreatParam
-   * @param strIn Either Commonmark formatted text or filename or..
-   * @return Text in HTML format
+   * @brief Ask for available converters matching in/out data types
+   * @param inFormat in-data format
+   * @param outFormat out-data format
+   * @return string-list of matching converters
    */
-  //Q_INVOKABLE QString stringToHtml(TreatParam paramAs, const QString &strIn, OutputStyle outputStyle = StyleDefault);
-
   Q_INVOKABLE static QStringList availableConverters(DataFormat inFormat, DataFormat outFormat);
-
-  Q_INVOKABLE static QString doConvert(QString strIn, QString strPlugin, DataFormat inFormat, DataFormat outFormat);
-
-  Q_INVOKABLE static QString addFraming(QString strIn, QString strPlugin, DataFormat dataFormat);
+  /**
+   * @brief Convert in -> out
+   * @param pluginName plugin name of plugin to perform conversion
+   * @param inFormat in-data format
+   * @param outFormat out-data format
+   * @param strIn string to convert
+   * @return converted string empty on error
+   */
+  Q_INVOKABLE static QString convert(QString pluginName, DataFormat inFormat, DataFormat outFormat, QString strIn);
+  /**
+   * @brief Convert in -> file
+   * @param pluginName plugin name of plugin to perform conversion
+   * @param inFormat in-data format
+   * @param outFormat out-data format
+   * @param strIn string to convert
+   * @param strFileOut filename converted output is written to
+   * @return converted string empty on error
+   */
+  Q_INVOKABLE static bool convertToFile(QString pluginName, DataFormat inFormat, DataFormat outFormat, QString strIn, QString strFileOut);
+  /**
+   * @brief Add frames e.g HTML headers/footers/css
+   * @param strIn string to convert
+   * @param pluginName plugin name of plugin to perform conversion
+   * @param dataFormat data format of input and output
+   * @return true if file was written
+   */
+  Q_INVOKABLE static QString addFraming(QString pluginName, DataFormat dataFormat, QString strIn);
 
 
 signals:
