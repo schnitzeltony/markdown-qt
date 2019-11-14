@@ -17,7 +17,7 @@ public:
     virtual QString displayName() override;
     virtual bool convert(ConvertType convertType, const QByteArray dataIn, QByteArray& dataOut) override;
 private:
-    QByteArray convertToPdf(QByteArray strHtmlUtf8);
+    QByteArray convertToPdfOrPrinter(QByteArray strHtmlUtf8, CMarkDownQt::DataFormat outFormat);
 };
 
 #endif // CQTWEBENGINEPDF_PLUGIN_H

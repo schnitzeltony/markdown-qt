@@ -5,6 +5,8 @@
 #include <QPageLayout>
 #include <QPageSize>
 #include <QApplication>
+#include <QPrinter>
+#include <QPrintDialog>
 
 CQtWebEnginePdfPlugin::CQtWebEnginePdfPlugin()
 {
@@ -22,6 +24,7 @@ QList<PluginInterfaceMdQt::ConvertType> CQtWebEnginePdfPlugin::availableConversi
 {
     QList<PluginInterfaceMdQt::ConvertType> supported;
     supported.append({CMarkDownQt::FormatHtmlUtf8, CMarkDownQt::FormatPdfBin});
+    supported.append({CMarkDownQt::FormatHtmlUtf8, CMarkDownQt::FormatPrinterOut});
     return supported;
 }
 
@@ -34,13 +37,14 @@ bool CQtWebEnginePdfPlugin::convert(ConvertType convertType, const QByteArray da
 {
     bool bSupported = false;
     if(convertType.inFormat==CMarkDownQt::FormatHtmlUtf8 &&
-            convertType.outFormat==CMarkDownQt::FormatPdfBin) {
-        dataOut = convertToPdf(dataIn);
+            (convertType.outFormat==CMarkDownQt::FormatPdfBin ||
+            convertType.outFormat==CMarkDownQt::FormatPrinterOut)) {
+        dataOut = convertToPdfOrPrinter(dataIn, convertType.outFormat);
     }
     return bSupported;
 }
 
-QByteArray CQtWebEnginePdfPlugin::convertToPdf(QByteArray strHtmlUtf8)
+QByteArray CQtWebEnginePdfPlugin::convertToPdfOrPrinter(QByteArray strHtmlUtf8 , CMarkDownQt::DataFormat outFormat)
 {
     QByteArray strPdf;
     if(strHtmlUtf8.size() > 0) {
@@ -70,17 +74,36 @@ QByteArray CQtWebEnginePdfPlugin::convertToPdf(QByteArray strHtmlUtf8)
         });
         loop.exec();
 
-        // -> pdf
         if(bLoadOK) {
-            webPage.printToPdf([&](const QByteArray &strPdfCreated) {
-                    strPdf = strPdfCreated;
-                    loop.quit();
-                },
-                pageLayout);
-            loop.exec();
+            // -> pdf
+            if(outFormat == CMarkDownQt::FormatPdfBin) {
+                webPage.printToPdf([&](const QByteArray &strPdfCreated) {
+                        strPdf = strPdfCreated;
+                        loop.quit();
+                    },
+                    pageLayout);
+                loop.exec();
+            }
+            // -> printer
+            else {
+                QPrinter printer;
+                printer.setPageLayout(pageLayout);
+                QPrintDialog printDialog(&printer);
+                if (printDialog.exec() == QDialog::Accepted) {
+                    webPage.print(&printer, [&](bool bPrinted) {
+                        if(!bPrinted) {
+                            qWarning("Webpage print: page was not printed!");
+                        }
+                        loop.quit();
+                    });
+
+                loop.exec();
+
+                }
+            }
         }
         else {
-            qWarning("PDF export: page was not loaded!");
+            qWarning("Webpage print/export: page was not loaded!");
         }
     }
     return strPdf;

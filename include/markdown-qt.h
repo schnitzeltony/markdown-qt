@@ -24,6 +24,7 @@ public:
     FormatMdUtf8 = 0,
     FormatHtmlUtf8 = 1,
     FormatPdfBin = 2,
+    FormatPrinterOut = 3,
 
     FormatUnknown // don't forget to update validDataFormats below
   };
@@ -84,7 +85,7 @@ private:
   static PluginLoaderMdQt m_PluginLoader;
 };
 
-// hmm should be member of CMarkDownQt..
+// hmm should be member of CMarkDownQt.. / printer is not a data format
 constexpr std::initializer_list<CMarkDownQt::DataFormat> validDataFormats =
 {
     CMarkDownQt::FormatMdUtf8,
