@@ -79,6 +79,9 @@ QByteArray CQtWebEnginePdfPlugin::convertToPdf(QByteArray strHtmlUtf8)
                 pageLayout);
             loop.exec();
         }
+        else {
+            qWarning("PDF export: page was not loaded!");
+        }
     }
     return strPdf;
 }
