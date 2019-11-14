@@ -46,7 +46,18 @@ QByteArray CQtWebEnginePdfPlugin::convertToPdf(QByteArray strHtmlUtf8)
     if(strHtmlUtf8.size() > 0) {
         // yes - we need options for plugins
         QUrl baseUrl = QUrl();
-        QPageLayout pageLayout = QPageLayout(QPageSize(QPageSize::A4), QPageLayout::Portrait, QMarginsF());
+        QMarginsF minMargins;
+        minMargins.setLeft(5.0);
+        minMargins.setRight(5.0);
+        minMargins.setTop(15.0);
+        minMargins.setBottom(15.0);
+        QPageLayout pageLayout =
+                QPageLayout(
+                    QPageSize(QPageSize::A4),
+                    QPageLayout::Portrait,
+                    QMarginsF(),
+                    QPageLayout::Millimeter,
+                    minMargins);
 
         QWebEnginePage webPage;
         // load
