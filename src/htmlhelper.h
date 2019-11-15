@@ -16,10 +16,10 @@ typedef struct _TagInfo {
     eTagType tagType;
 } TagInfo;
 
-class CHtmlHelper
+class HtmlHelper
 {
 public:
-    CHtmlHelper();
+    HtmlHelper();
     bool parse(const QByteArray& strHtml, int startPos = 0);
     const QMap<int, TagInfo>& GetTagMap() { return m_tagMap; }
 private:

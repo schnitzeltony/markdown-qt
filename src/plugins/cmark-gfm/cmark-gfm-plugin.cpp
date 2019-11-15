@@ -3,7 +3,7 @@
 #include "cmark-gfm-source/extensions/cmark-gfm-core-extensions.h"
 #include "cmark-gfm-source/src/html.h"
 #include "parser.h"
-#include "chtmlhelper.h"
+#include "htmlhelper.h"
 #include <QMapIterator>
 
 CMarkGfmPlugin::~CMarkGfmPlugin()
@@ -71,7 +71,7 @@ QByteArray CMarkGfmPlugin::convertToHtml(QByteArray strMarkDownUtf8)
             // <li class="task-list-item"><input type="checkbox" checked="" disabled="" /><p>foo</p>
             // turns into
             // <p><li class="task-list-item"><input type="checkbox" checked="" disabled="" />foo</p>
-            CHtmlHelper htmlHelper;
+            HtmlHelper htmlHelper;
             if(htmlHelper.parse(strHtml)) {
                 const QMap<int, TagInfo>& tagMap = htmlHelper.GetTagMap();
                 int currSearchPos = 0;

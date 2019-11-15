@@ -1,10 +1,10 @@
-#include "chtmlhelper.h"
+#include "htmlhelper.h"
 
-CHtmlHelper::CHtmlHelper()
+HtmlHelper::HtmlHelper()
 {
 }
 
-bool CHtmlHelper::parse(const QByteArray &strHtml, int startPos)
+bool HtmlHelper::parse(const QByteArray &strHtml, int startPos)
 {
     bool bParseOK = true;
     m_tagMap.clear();

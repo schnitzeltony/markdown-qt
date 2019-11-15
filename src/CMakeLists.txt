@@ -9,12 +9,12 @@ add_library(MarkdownQt
     SHARED
         # for moc & qtcreator to have it in-tree
         ${CMAKE_SOURCE_DIR}/include/markdown-qt.h
-        chtmlhelper.h
         markdown-qt.cpp
         pluginloader_p.h
         pluginloader.cpp
         plugininterface.cpp
-        chtmlhelper.cpp
+        htmlhelper.h
+        htmlhelper.cpp
         resources.qrc
 )
 add_library(MarkdownQt::MarkdownQt ALIAS MarkdownQt)
