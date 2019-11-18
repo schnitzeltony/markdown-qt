@@ -1,4 +1,5 @@
 #include "github-online-plugin.h"
+#include "pluginbase_p.h"
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -31,8 +32,19 @@ bool CGithubOnlinePlugin::convert(ConvertType convertType, const QByteArray data
     return bSupported;
 }
 
+bool CGithubOnlinePlugin::initAvailOptions()
+{
+    Q_D(PluginBaseMdQt);
+    d->m_optionMap[QStringLiteral("mode")] =
+            OptionEntry(tr("Conversion mode \"gfm\"/\"markdown\""), QStringLiteral("gfm"));
+    d->m_optionMap[QStringLiteral("context")] =
+            OptionEntry(tr("Repository context e.g \"github/gollum\""), QStringLiteral(""));
+    return true;
+}
+
 QByteArray CGithubOnlinePlugin::convertToHtml(QByteArray strMarkDownUtf8)
 {
+    Q_D(PluginBaseMdQt);
     QByteArray strHtml;
     if(strMarkDownUtf8.count() > 0) {
         QUrl serviceUrl = QUrl("https://api.github.com/markdown");
@@ -40,8 +52,20 @@ QByteArray CGithubOnlinePlugin::convertToHtml(QByteArray strMarkDownUtf8)
         request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/x-www-form-urlencoded"));
         QJsonObject json;
         json.insert("text", QString::fromUtf8(strMarkDownUtf8));
-        json.insert("mode", QStringLiteral("gfm"));
-        // TODO context -> yes we need an option system
+        QString strMode = QStringLiteral("gfm");
+        QString strContext;
+        if(hasOptions()) {
+            QString strModeFromSetting = d->m_optionMap[QStringLiteral("mode")].value.toString();
+            if(!strModeFromSetting.isEmpty() &&
+                    (strModeFromSetting == QStringLiteral("gfm") || strModeFromSetting == QStringLiteral("markdown"))) {
+                strMode = strModeFromSetting;
+            }
+            strContext = d->m_optionMap[QStringLiteral("context")].value.toString();
+        }
+        json.insert("mode", strMode);
+        if(!strContext.isEmpty()) {
+            json.insert("context", strContext);
+        }
 
         QNetworkAccessManager networkManager;
         networkManager.post(request, QJsonDocument(json).toJson());

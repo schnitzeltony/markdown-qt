@@ -15,6 +15,8 @@ public:
     virtual QList<ConvertType> availableConversions() override;
     virtual QString displayName() override;
     virtual bool convert(ConvertType convertType, const QByteArray dataIn, QByteArray& dataOut) override;
+protected:
+    virtual bool initAvailOptions() override;
 private:
     QByteArray convertToHtml(QByteArray strMarkDownUtf8);
 };
