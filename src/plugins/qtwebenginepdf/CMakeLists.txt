@@ -1,4 +1,4 @@
-find_package(Qt5 COMPONENTS WebEngine WebEngineWidgets CONFIG REQUIRED)
+find_package(Qt5 COMPONENTS WebEngine WebEngineWidgets PrintSupport CONFIG REQUIRED)
 
 add_library(PluginQtWebEnginePdf
     MODULE
@@ -15,6 +15,7 @@ target_link_libraries(PluginQtWebEnginePdf
         Qt5::Core
         Qt5::WebEngine
         Qt5::WebEngineWidgets
+        Qt5::PrintSupport
         MarkdownQt
         # ask linker to help us finding unresolved symbols
         "-Wl,--no-undefined"
