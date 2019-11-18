@@ -121,8 +121,6 @@ void PluginBaseMdQt::storeOptions(const QString organizationName, const QString 
         QMapIterator<QString, OptionEntry> iter(d->m_optionMap);
         QSettings storedSettings(organizationName, applicationName);
         storedSettings.beginGroup(displayName());
-        QString strFileName = storedSettings.fileName();
-        qWarning("%s", qPrintable(strFileName));
         while (iter.hasNext()) {
             iter.next();
             storedSettings.setValue(iter.key(), iter.value().value);
