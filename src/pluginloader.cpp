@@ -29,7 +29,7 @@ bool PluginLoaderMdQtPrivate::ScanPlugins()
                 PluginInfo pluginInfo;
                 pluginInfo.pluginLoader = new QPluginLoader(strFullLibPath);
                 if (auto instance = pluginInfo.pluginLoader->instance()) {
-                    if (auto plugin = qobject_cast<PluginInterfaceMdQt* >(instance)){
+                    if (auto plugin = qobject_cast<PluginBaseMdQt* >(instance)){
                         QString strDisplayName = plugin->displayName();
                         pluginInfo.conversionTypes = plugin->availableConversions();
                         pluginInfo.strDisplayName = strDisplayName;
@@ -75,7 +75,7 @@ PluginLoaderMdQt::~PluginLoaderMdQt()
     delete d_ptr;
 }
 
-QStringList PluginLoaderMdQt::listAvailable(const PluginInterfaceMdQt::ConvertType convertType)
+QStringList PluginLoaderMdQt::listAvailable(const PluginBaseMdQt::ConvertType convertType)
 {
     Q_D(PluginLoaderMdQt);
     QStringList pluginNames;
@@ -92,13 +92,13 @@ QStringList PluginLoaderMdQt::listAvailable(const PluginInterfaceMdQt::ConvertTy
     return pluginNames;
 }
 
-PluginInterfaceMdQt *PluginLoaderMdQt::load(const QString strDisplayName)
+PluginBaseMdQt *PluginLoaderMdQt::load(const QString strDisplayName)
 {
     Q_D(PluginLoaderMdQt);
-    PluginInterfaceMdQt *plugin = nullptr;
+    PluginBaseMdQt *plugin = nullptr;
     if(d->ScanPlugins() && d->m_pluginInfoMap.contains(strDisplayName)) {
         auto pluginInfo = d->m_pluginInfoMap[strDisplayName];
-        plugin = qobject_cast<PluginInterfaceMdQt* >(pluginInfo.pluginLoader->instance());
+        plugin = qobject_cast<PluginBaseMdQt* >(pluginInfo.pluginLoader->instance());
     }
     return plugin;
 }

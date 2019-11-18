@@ -4,7 +4,33 @@
 #include <QString>
 #include <QDir>
 
-PluginLoaderMdQt CMarkDownQt::m_PluginLoader = PluginLoaderMdQt();
+static PluginLoaderMdQt sPluginLoader;
+static QString sSettingsOrgName;
+static QString sSettingsAppName;
+static QMap<QString, QMap<QString, PluginBaseMdQt::OptionEntry>> sPluginOptionMap;
+
+void CheckSettings(PluginBaseMdQt *plugin)
+{
+    if(plugin->hasOptions()) {
+        // add / load plugin's options in our map
+        QString pluginName = plugin->displayName();
+        if(!sPluginOptionMap.contains(pluginName)) {
+            // first access?
+            if(!sSettingsOrgName.isEmpty() && !sSettingsAppName.isEmpty()) {
+                // read from settings
+                plugin->loadOptions(sSettingsOrgName, sSettingsAppName);
+                // write back defaults
+                plugin->storeOptions(sSettingsOrgName, sSettingsAppName);
+            }
+            sPluginOptionMap[pluginName] = plugin->options();
+        }
+        else {
+            // subsequent access: ensure plugin gets our settings
+            plugin->setOptions(sPluginOptionMap[pluginName]);
+        }
+    }
+}
+
 
 CMarkDownQt::CMarkDownQt(QObject *parent) : QObject(parent)
 {
@@ -13,6 +39,12 @@ CMarkDownQt::CMarkDownQt(QObject *parent) : QObject(parent)
 int CMarkDownQt::registerQML()
 {
     return qmlRegisterSingletonType<CMarkDownQt>("MarkDownQt", 1, 0, "MarkDownQt", CMarkDownQt::getQMLInstance);
+}
+
+void CMarkDownQt::setSettingsParameters(QString strOrganisation, QString strApplicationName)
+{
+    sSettingsOrgName = strOrganisation;
+    sSettingsAppName = strApplicationName;
 }
 
 QObject *CMarkDownQt::getQMLInstance(QQmlEngine *t_engine, QJSEngine *t_scriptEngine)
@@ -25,17 +57,18 @@ QObject *CMarkDownQt::getQMLInstance(QQmlEngine *t_engine, QJSEngine *t_scriptEn
 
 QStringList CMarkDownQt::availableConverters(DataFormat inFormat, DataFormat outFormat)
 {
-    PluginInterfaceMdQt::ConvertType convertType = {inFormat, outFormat};
-    return m_PluginLoader.listAvailable(convertType);
+    PluginBaseMdQt::ConvertType convertType = {inFormat, outFormat};
+    return sPluginLoader.listAvailable(convertType);
 }
 
 QByteArray CMarkDownQt::convert(QString pluginName, DataFormat inFormat, DataFormat outFormat, QByteArray dataIn)
 {
     QByteArray dataOut;
-    PluginInterfaceMdQt *interface = m_PluginLoader.load(pluginName);
-    if(interface) {
-        PluginInterfaceMdQt::ConvertType convertType = {inFormat, outFormat};
-        interface->convert(convertType, dataIn, dataOut);
+    PluginBaseMdQt *plugin = sPluginLoader.load(pluginName);
+    if(plugin) {
+        CheckSettings(plugin);
+        PluginBaseMdQt::ConvertType convertType = {inFormat, outFormat};
+        plugin->convert(convertType, dataIn, dataOut);
     }
     return dataOut;
 }
@@ -61,9 +94,10 @@ bool CMarkDownQt::convertToFile(QString pluginName, DataFormat inFormat, DataFor
 QByteArray CMarkDownQt::addFraming(QString pluginName, DataFormat dataFormat, QByteArray dataIn)
 {
     QByteArray dataOut;
-    PluginInterfaceMdQt *interface = m_PluginLoader.load(pluginName);
-    if(interface) {
-        interface->addFraming(dataFormat, dataIn, dataOut);
+    PluginBaseMdQt *plugin = sPluginLoader.load(pluginName);
+    if(plugin) {
+        CheckSettings(plugin);
+        plugin->addFraming(dataFormat, dataIn, dataOut);
     }
     return dataOut;
 }

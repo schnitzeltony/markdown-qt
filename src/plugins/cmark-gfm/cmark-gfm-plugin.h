@@ -4,17 +4,18 @@
 #include <QtPlugin>
 #include "markdown-qt.h"
 
-class CMarkGfmPlugin : public QObject, public PluginInterfaceMdQt
+class CMarkGfmPlugin : public PluginBaseMdQt
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID PluginInterfaceMdQt_iid)
-    Q_INTERFACES(PluginInterfaceMdQt)
-
+    Q_PLUGIN_METADATA(IID PluginBaseMdQt_iid)
+    Q_INTERFACES(PluginBaseMdQt)
 public:
     ~CMarkGfmPlugin() override;
     virtual QList<ConvertType> availableConversions() override;
     virtual QString displayName() override;
     virtual bool convert(ConvertType convertType, const QByteArray dataIn, QByteArray& dataOut) override;
+protected:
+    virtual bool initAvailOptions() override;
 private:
     QByteArray convertToHtml(QByteArray strMarkDownUtf8);
 };

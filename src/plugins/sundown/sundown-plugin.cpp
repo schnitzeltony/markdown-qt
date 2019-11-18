@@ -7,9 +7,9 @@ CSundownPlugin::~CSundownPlugin()
 
 }
 
-QList<PluginInterfaceMdQt::ConvertType> CSundownPlugin::availableConversions()
+QList<PluginBaseMdQt::ConvertType> CSundownPlugin::availableConversions()
 {
-    QList<PluginInterfaceMdQt::ConvertType> supported;
+    QList<PluginBaseMdQt::ConvertType> supported;
     supported.append({CMarkDownQt::FormatMdUtf8, CMarkDownQt::FormatHtmlUtf8});
     return supported;
 }

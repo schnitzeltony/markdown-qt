@@ -20,9 +20,9 @@ CQtWebEnginePdfPlugin::~CQtWebEnginePdfPlugin()
 {
 }
 
-QList<PluginInterfaceMdQt::ConvertType> CQtWebEnginePdfPlugin::availableConversions()
+QList<PluginBaseMdQt::ConvertType> CQtWebEnginePdfPlugin::availableConversions()
 {
-    QList<PluginInterfaceMdQt::ConvertType> supported;
+    QList<PluginBaseMdQt::ConvertType> supported;
     supported.append({CMarkDownQt::FormatHtmlUtf8, CMarkDownQt::FormatPdfBin});
     supported.append({CMarkDownQt::FormatHtmlUtf8, CMarkDownQt::FormatPrinterOut});
     return supported;

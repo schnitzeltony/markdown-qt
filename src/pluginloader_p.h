@@ -5,7 +5,7 @@
 
 typedef struct _PluginInfo{
     QString strDisplayName;
-    QList<PluginInterfaceMdQt::ConvertType> conversionTypes;
+    QList<PluginBaseMdQt::ConvertType> conversionTypes;
     QPluginLoader *pluginLoader;
 } PluginInfo;
 

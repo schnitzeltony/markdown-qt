@@ -4,11 +4,11 @@
 #include <QtPlugin>
 #include "markdown-qt.h"
 
-class CQtWebEnginePdfPlugin : public QObject, public PluginInterfaceMdQt
+class CQtWebEnginePdfPlugin : public PluginBaseMdQt
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID PluginInterfaceMdQt_iid)
-    Q_INTERFACES(PluginInterfaceMdQt)
+    Q_PLUGIN_METADATA(IID PluginBaseMdQt_iid)
+    Q_INTERFACES(PluginBaseMdQt)
 
 public:
     CQtWebEnginePdfPlugin();

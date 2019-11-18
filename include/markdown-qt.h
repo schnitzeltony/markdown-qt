@@ -6,8 +6,7 @@
 #include <QPluginLoader>
 #include <QList>
 #include <QMap>
-
-// TODO PIMPL !!!!!!
+#include <QVariant>
 
 QT_BEGIN_NAMESPACE
 class QQmlEngine;
@@ -35,6 +34,8 @@ public:
    * @return return value of qmlRegisterSingletonType
    */
   static int registerQML();
+
+  Q_INVOKABLE static void setSettingsParameters(QString strOrganisation, QString strApplicationName);
 
   /**
    * @brief Ask for available converters matching in/out data types
@@ -81,8 +82,6 @@ public slots:
 private:
   explicit CMarkDownQt(QObject *parent = nullptr);
   static QObject *getQMLInstance(QQmlEngine *t_engine, QJSEngine *t_scriptEngine);
-
-  static PluginLoaderMdQt m_PluginLoader;
 };
 
 // hmm should be member of CMarkDownQt.. / printer is not a data format
@@ -93,9 +92,13 @@ constexpr std::initializer_list<CMarkDownQt::DataFormat> validDataFormats =
     CMarkDownQt::FormatPdfBin
 };
 
+// clang: be quiet
+QT_WARNING_DISABLE_CLANG("-Wshadow-field")
 
 // plugin interface - for those not interested in QML-wrapper
-class MARKDOWNQT_EXPORT PluginInterfaceMdQt
+// followed https://techbase.kde.org/Policies/Library_Code_Policy/Shared_D-Pointer_Example
+class PluginBaseMdQtPrivate;
+class MARKDOWNQT_EXPORT PluginBaseMdQt : public QObject
 {
 public:
     typedef struct _ConvertType{
@@ -105,16 +108,35 @@ public:
             return inFormat == other.inFormat && outFormat == other.outFormat;
         }
     } ConvertType;
-
-    virtual ~PluginInterfaceMdQt();
-    virtual QList<ConvertType> availableConversions() = 0;
+    explicit PluginBaseMdQt(QObject *parent = nullptr);
+    virtual ~PluginBaseMdQt();
+    virtual QList<ConvertType> availableConversions()= 0;
     virtual QString displayName() = 0;
     virtual bool convert(ConvertType convertType, const QByteArray dataIn, QByteArray& dataOut) = 0;
     virtual bool addFraming(CMarkDownQt::DataFormat dataFormat, const QByteArray dataIn, QByteArray& dataOut);
+
+    // Options
+    typedef struct _OptionEntry{
+        _OptionEntry();
+        _OptionEntry(QString _displayText, QVariant defaultValue);
+        QString displayText;
+        QVariant value;
+    } OptionEntry;
+    bool hasOptions();
+    QMap<QString, OptionEntry> options();
+    void setOptions(QMap<QString, OptionEntry> newOptions);
+    bool loadOptions(const QString organizationName, const QString applicationName);
+    void storeOptions(const QString organizationName, const QString applicationName);
+protected:
+    virtual bool initAvailOptions() { return false; }
+
+    const QScopedPointer<PluginBaseMdQtPrivate> d_ptr;
+    PluginBaseMdQt(PluginBaseMdQtPrivate &dd, QObject *parent);
+    Q_DECLARE_PRIVATE(PluginBaseMdQt)
 };
 
-#define PluginInterfaceMdQt_iid "markdown.qt.PluginInterfaceMdQt"
-Q_DECLARE_INTERFACE(PluginInterfaceMdQt, PluginInterfaceMdQt_iid)
+#define PluginBaseMdQt_iid "markdown.qt.PluginBaseMdQt"
+Q_DECLARE_INTERFACE(PluginBaseMdQt, PluginBaseMdQt_iid)
 
 // plugin loader
 class PluginLoaderMdQtPrivate;
@@ -124,8 +146,8 @@ public:
     PluginLoaderMdQt();
     ~PluginLoaderMdQt();
 
-    QStringList listAvailable(const PluginInterfaceMdQt::ConvertType convertType);
-    PluginInterfaceMdQt *load(const QString strDisplayName);
+    QStringList listAvailable(const PluginBaseMdQt::ConvertType convertType);
+    PluginBaseMdQt *load(const QString strDisplayName);
     bool unload(const QString strDisplayName);
 private:
     PluginLoaderMdQtPrivate *d_ptr;

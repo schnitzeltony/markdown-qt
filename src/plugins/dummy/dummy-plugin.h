@@ -4,11 +4,11 @@
 #include <QtPlugin>
 #include "markdown-qt.h"
 
-class CDummyPlugin : public QObject, public PluginInterfaceMdQt
+class CDummyPlugin : public PluginBaseMdQt
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID PluginInterfaceMdQt_iid)
-    Q_INTERFACES(PluginInterfaceMdQt)
+    Q_PLUGIN_METADATA(IID PluginBaseMdQt_iid)
+    Q_INTERFACES(PluginBaseMdQt)
 
 public:
     ~CDummyPlugin() override;

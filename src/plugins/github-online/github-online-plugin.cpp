@@ -9,9 +9,9 @@ CGithubOnlinePlugin::~CGithubOnlinePlugin()
 {
 }
 
-QList<PluginInterfaceMdQt::ConvertType> CGithubOnlinePlugin::availableConversions()
+QList<PluginBaseMdQt::ConvertType> CGithubOnlinePlugin::availableConversions()
 {
-    QList<PluginInterfaceMdQt::ConvertType> supported;
+    QList<PluginBaseMdQt::ConvertType> supported;
     supported.append({CMarkDownQt::FormatMdUtf8, CMarkDownQt::FormatHtmlUtf8});
     return supported;
 }

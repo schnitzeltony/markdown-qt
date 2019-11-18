@@ -4,11 +4,11 @@
 #include <QtPlugin>
 #include "markdown-qt.h"
 
-class CSundownPlugin : public QObject, public PluginInterfaceMdQt
+class CSundownPlugin : public PluginBaseMdQt
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID PluginInterfaceMdQt_iid)
-    Q_INTERFACES(PluginInterfaceMdQt)
+    Q_PLUGIN_METADATA(IID PluginBaseMdQt_iid)
+    Q_INTERFACES(PluginBaseMdQt)
 
 public:
     ~CSundownPlugin() override;

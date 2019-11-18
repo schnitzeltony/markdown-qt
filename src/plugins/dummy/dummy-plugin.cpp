@@ -5,9 +5,9 @@ CDummyPlugin::~CDummyPlugin()
 
 }
 
-QList<PluginInterfaceMdQt::ConvertType> CDummyPlugin::availableConversions()
+QList<PluginBaseMdQt::ConvertType> CDummyPlugin::availableConversions()
 {
-    QList<PluginInterfaceMdQt::ConvertType> supported;
+    QList<PluginBaseMdQt::ConvertType> supported;
     for(auto inFormat : validDataFormats) {
         for(auto outFormat : validDataFormats) {
             supported.append({inFormat, outFormat});

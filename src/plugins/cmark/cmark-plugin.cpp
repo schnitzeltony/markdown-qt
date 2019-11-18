@@ -7,9 +7,9 @@ CMarkPlugin::~CMarkPlugin()
 
 }
 
-QList<PluginInterfaceMdQt::ConvertType> CMarkPlugin::availableConversions()
+QList<PluginBaseMdQt::ConvertType> CMarkPlugin::availableConversions()
 {
-    QList<PluginInterfaceMdQt::ConvertType> supported;
+    QList<PluginBaseMdQt::ConvertType> supported;
     supported.append({CMarkDownQt::FormatMdUtf8, CMarkDownQt::FormatHtmlUtf8});
     return supported;
 }

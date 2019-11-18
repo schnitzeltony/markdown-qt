@@ -1,4 +1,5 @@
 #include "cmark-gfm-plugin.h"
+#include "pluginbase_p.h"
 #include "cmark-gfm-source/src/cmark-gfm.h"
 #include "cmark-gfm-source/extensions/cmark-gfm-core-extensions.h"
 #include "cmark-gfm-source/src/html.h"
@@ -11,9 +12,9 @@ CMarkGfmPlugin::~CMarkGfmPlugin()
 
 }
 
-QList<PluginInterfaceMdQt::ConvertType> CMarkGfmPlugin::availableConversions()
+QList<PluginBaseMdQt::ConvertType> CMarkGfmPlugin::availableConversions()
 {
-    QList<PluginInterfaceMdQt::ConvertType> supported;
+    QList<PluginBaseMdQt::ConvertType> supported;
     supported.append({CMarkDownQt::FormatMdUtf8, CMarkDownQt::FormatHtmlUtf8});
     return supported;
 }
@@ -33,26 +34,83 @@ bool CMarkGfmPlugin::convert(ConvertType convertType, const QByteArray dataIn, Q
     return bSupported;
 }
 
+bool CMarkGfmPlugin::initAvailOptions()
+{
+    Q_D(PluginBaseMdQt);
+    d->m_optionMap[QStringLiteral("CMARK_OPT_UNSAFE")] =
+            OptionEntry(tr("Allow unsafe HTML"), true);
+    d->m_optionMap[QStringLiteral("CMARK_OPT_LIBERAL_HTML_TAG")] =
+            OptionEntry(tr("Liberal HTML tag"), true);
+    d->m_optionMap[QStringLiteral("CMARK_OPT_GITHUB_PRE_LANG")] =
+            OptionEntry(tr("Use GitHub-style <pre lang=\"x\"> tags"), false);
+    d->m_optionMap[QStringLiteral("CMARK_OPT_FULL_INFO_STRING")] =
+            OptionEntry(tr("Include remainder of info string in code blocks as separate attribute"), false);
+
+    d->m_optionMap[QStringLiteral("CMARK_EXT_FOOTNOTES")] =
+            OptionEntry(tr("Enable footnotes extension"), false);
+    d->m_optionMap[QStringLiteral("CMARK_EXT_TABLE")] =
+            OptionEntry(tr("Enable table extension"), true);
+    d->m_optionMap[QStringLiteral("CMARK_EXT_STRIKETHROUGH")] =
+            OptionEntry(tr("Enable strikethrough extension"), true);
+    d->m_optionMap[QStringLiteral("CMARK_EXT_AUTOLINK")] =
+            OptionEntry(tr("Enable autolink extension"), true);
+    d->m_optionMap[QStringLiteral("CMARK_EXT_TAGFILTER")] =
+            OptionEntry(tr("Enable tagfilter extension"), true);
+    d->m_optionMap[QStringLiteral("CMARK_EXT_TASKLIST")] =
+            OptionEntry(tr("Enable tasklist extension"), true);
+    // TODO add more options
+    return true;
+}
+
 QByteArray CMarkGfmPlugin::convertToHtml(QByteArray strMarkDownUtf8)
 {
-    int options = CMARK_OPT_UNSAFE | CMARK_OPT_LIBERAL_HTML_TAG | /*CMARK_OPT_GITHUB_PRE_LANG |*/ CMARK_OPT_FULL_INFO_STRING; /* TODO options for plugins */
+    Q_D(PluginBaseMdQt);
+    int options = 0;
+    if(hasOptions()) {
+        if(d->m_optionMap[QStringLiteral("CMARK_OPT_UNSAFE")].value.toBool()) {
+            options |= CMARK_OPT_UNSAFE;
+        }
+        if(d->m_optionMap[QStringLiteral("CMARK_OPT_LIBERAL_HTML_TAG")].value.toBool()) {
+            options |= CMARK_OPT_LIBERAL_HTML_TAG;
+        }
+        if(d->m_optionMap[QStringLiteral("CMARK_OPT_GITHUB_PRE_LANG")].value.toBool()) {
+            options |= CMARK_OPT_GITHUB_PRE_LANG;
+        }
+        if(d->m_optionMap[QStringLiteral("CMARK_OPT_FULL_INFO_STRING")].value.toBool()) {
+            options |= CMARK_OPT_FULL_INFO_STRING;
+        }
+    }
     cmark_gfm_core_extensions_ensure_registered();
     cmark_parser *parser = cmark_parser_new_with_mem(options, cmark_get_arena_mem_allocator());
     QByteArray strHtml;
     if(parser) {
-        QStringList listExtensions;
-        //listExtensions.append(QStringLiteral("footnotes"));
-        listExtensions.append(QStringLiteral("table"));
-        listExtensions.append(QStringLiteral("strikethrough"));
-        listExtensions.append(QStringLiteral("autolink"));
-        listExtensions.append(QStringLiteral("tagfilter"));
-        listExtensions.append(QStringLiteral("tasklist"));
-        for(auto strExtension : listExtensions) {
-            cmark_syntax_extension *syntax_extension = cmark_find_syntax_extension(qPrintable(strExtension));
-            if(syntax_extension) {
-                cmark_parser_attach_syntax_extension(parser, syntax_extension);
+        if(hasOptions()) {
+            QStringList listExtensions;
+            if(d->m_optionMap[QStringLiteral("CMARK_EXT_FOOTNOTES")].value.toBool()) {
+                listExtensions.append(QStringLiteral("footnotes"));
             }
+            if(d->m_optionMap[QStringLiteral("CMARK_EXT_TABLE")].value.toBool()) {
+                listExtensions.append(QStringLiteral("table"));
+            }
+            if(d->m_optionMap[QStringLiteral("CMARK_EXT_STRIKETHROUGH")].value.toBool()) {
+                listExtensions.append(QStringLiteral("strikethrough"));
+            }
+            if(d->m_optionMap[QStringLiteral("CMARK_EXT_AUTOLINK")].value.toBool()) {
+                listExtensions.append(QStringLiteral("autolink"));
+            }
+            if(d->m_optionMap[QStringLiteral("CMARK_EXT_TAGFILTER")].value.toBool()) {
+                listExtensions.append(QStringLiteral("tagfilter"));
+            }
+            if(d->m_optionMap[QStringLiteral("CMARK_EXT_TASKLIST")].value.toBool()) {
+                listExtensions.append(QStringLiteral("tasklist"));
+            }
+            for(auto strExtension : listExtensions) {
+                cmark_syntax_extension *syntax_extension = cmark_find_syntax_extension(qPrintable(strExtension));
+                if(syntax_extension) {
+                    cmark_parser_attach_syntax_extension(parser, syntax_extension);
+                }
 
+            }
         }
         cmark_parser_feed(parser, strMarkDownUtf8, size_t(strMarkDownUtf8.size()));
         cmark_node *document = cmark_parser_finish(parser);

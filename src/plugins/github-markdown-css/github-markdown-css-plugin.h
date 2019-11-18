@@ -4,11 +4,11 @@
 #include <QtPlugin>
 #include "markdown-qt.h"
 
-class CGithubMarkdownCssPlugin : public QObject, public PluginInterfaceMdQt
+class CGithubMarkdownCssPlugin : public PluginBaseMdQt
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID PluginInterfaceMdQt_iid)
-    Q_INTERFACES(PluginInterfaceMdQt)
+    Q_PLUGIN_METADATA(IID PluginBaseMdQt_iid)
+    Q_INTERFACES(PluginBaseMdQt)
 
 public:
     CGithubMarkdownCssPlugin();

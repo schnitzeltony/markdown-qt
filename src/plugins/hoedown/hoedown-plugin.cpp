@@ -7,9 +7,9 @@ CHoedownPlugin::~CHoedownPlugin()
 
 }
 
-QList<PluginInterfaceMdQt::ConvertType> CHoedownPlugin::availableConversions()
+QList<PluginBaseMdQt::ConvertType> CHoedownPlugin::availableConversions()
 {
-    QList<PluginInterfaceMdQt::ConvertType> supported;
+    QList<PluginBaseMdQt::ConvertType> supported;
     supported.append({CMarkDownQt::FormatMdUtf8, CMarkDownQt::FormatHtmlUtf8});
     return supported;
 }
