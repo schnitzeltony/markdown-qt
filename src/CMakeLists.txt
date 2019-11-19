@@ -49,8 +49,7 @@ target_include_directories(MarkdownQt
         $<INSTALL_INTERFACE:include/markdown-qt>
 )
 
-# compiler options
-target_compile_features(MarkdownQt PRIVATE cxx_std_11)
+# additional compiler options
 target_compile_options(MarkdownQt PRIVATE -Wall)
 
 # some target magic added by qtcreator
