@@ -1,4 +1,5 @@
 #include "github-markdown-css-plugin.h"
+#include "pluginbase_p.h"
 #include <QFile>
 
 CGithubMarkdownCssPlugin::CGithubMarkdownCssPlugin()
@@ -54,11 +55,28 @@ bool CGithubMarkdownCssPlugin::addFraming(CMarkDownQt::DataFormat dataFormat, co
     return bConverted;
 }
 
+constexpr auto defaultCss = ":/github-markdown-css-source/github-markdown.css";
+
+bool CGithubMarkdownCssPlugin::initAvailOptions()
+{
+    Q_D(PluginBaseMdQt);
+    d->m_optionMap[QStringLiteral("css-filename")] =
+            OptionEntry(tr("CSS filename"), defaultCss);
+    return true;
+}
+
 
 QByteArray CGithubMarkdownCssPlugin::cssHtml(QByteArray strHtmlIn)
 {
+    Q_D(PluginBaseMdQt);
     QByteArray strHtmlOut;
-    QString strStyleName = QStringLiteral(":/github-markdown-css-source/github-markdown.css");
+    QString strStyleName = defaultCss;
+    if(hasOptions()) {
+        QString strStyleNameFromOptions = d->m_optionMap[QStringLiteral("css-filename")].value.toString();
+        if(!strStyleNameFromOptions.isEmpty()) {
+            strStyleName = strStyleNameFromOptions;
+        }
+    }
     QString strStyleFooterName = QStringLiteral(":/github-styles/footer");
     QByteArray strStyle;
     QFile fileStyle(strStyleName);

@@ -17,6 +17,8 @@ public:
     virtual QString displayName() override;
     virtual bool convert(ConvertType convertType, const QByteArray dataIn, QByteArray& dataOut) override;
     virtual bool addFraming(CMarkDownQt::DataFormat dataFormat, const QByteArray dataIn, QByteArray& dataOut) override;
+protected:
+    virtual bool initAvailOptions() override;
 private:
     QByteArray cssHtml(QByteArray strHtmlIn);
 };
