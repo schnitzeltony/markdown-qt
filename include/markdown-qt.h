@@ -12,7 +12,6 @@ QT_BEGIN_NAMESPACE
 class QQmlEngine;
 class QJSEngine;
 class PluginLoaderMdQt;
-QT_END_NAMESPACE
 
 // our plugin wrapper for use by QML
 class MARKDOWNQT_EXPORT CMarkDownQt : public QObject
@@ -154,5 +153,6 @@ private:
     Q_DECLARE_PRIVATE(PluginLoaderMdQt)
 };
 
+QT_END_NAMESPACE
 
 #endif // CMarkDownQt_H
