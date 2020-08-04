@@ -13,7 +13,8 @@ class QQmlEngine;
 class QJSEngine;
 class PluginLoaderMdQt;
 
-// our plugin wrapper for use by QML
+
+// QML plugin wrapper
 class MARKDOWNQT_EXPORT CMarkDownQt : public QObject
 {
   Q_OBJECT
@@ -34,6 +35,11 @@ public:
    */
   static int registerQML();
 
+  /**
+   * @brief setSettingsParameters Pass application's QSettings to the library so it will load store in same file
+   * @param strOrganisation Applications Organisation (see QSettings for further details - by default subfolder in $HOME/.config)
+   * @param strApplicationName Applicartion name (see QSettings for further details)
+   */
   Q_INVOKABLE static void setSettingsParameters(QString strOrganisation, QString strApplicationName);
 
   /**
@@ -79,8 +85,8 @@ signals:
 public slots:
 
 private:
-  explicit CMarkDownQt(QObject *parent = nullptr);
-  static QObject *getQMLInstance(QQmlEngine *t_engine, QJSEngine *t_scriptEngine);
+    explicit CMarkDownQt(QObject *parent = nullptr);
+    static QObject *getQMLInstance(QQmlEngine *t_engine, QJSEngine *t_scriptEngine);
 };
 
 // hmm should be member of CMarkDownQt.. / printer is not a data format
@@ -94,7 +100,8 @@ constexpr std::initializer_list<CMarkDownQt::DataFormat> validDataFormats =
 // clang: be quiet
 QT_WARNING_DISABLE_CLANG("-Wshadow-field")
 
-// plugin interface - for those not interested in QML-wrapper
+
+// Qt/C++ plugin interface - for those not interested in QML-wrapper
 // followed https://techbase.kde.org/Policies/Library_Code_Policy/Shared_D-Pointer_Example
 class PluginBaseMdQtPrivate;
 class MARKDOWNQT_EXPORT PluginBaseMdQt : public QObject
@@ -136,6 +143,7 @@ protected:
 
 #define PluginBaseMdQt_iid "markdown.qt.PluginBaseMdQt"
 Q_DECLARE_INTERFACE(PluginBaseMdQt, PluginBaseMdQt_iid)
+
 
 // plugin loader
 class PluginLoaderMdQtPrivate;
