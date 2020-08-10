@@ -10,8 +10,6 @@ add_library(MarkdownQt
         # for moc & qtcreator to have it in-tree
         ${CMAKE_SOURCE_DIR}/include/markdown-qt.h
         markdown-qt.cpp
-        binaryoptionsmodel.h
-        binaryoptionsmodel.cpp
         pluginloader_p.h
         pluginloader.cpp
         pluginbase_p.h
