@@ -1,4 +1,13 @@
 if(BUILD_CMARK_PLUGIN)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(CMARK QUIET libcmark>=0.28.3)
+    if(NOT $CMARK_FOUND)
+        message("cmark not found")
+        set(BUILD_CMARK_PLUGIN OFF)
+    endif(NOT $CMARK_FOUND)
+endif(BUILD_CMARK_PLUGIN)
+
+if(BUILD_CMARK_PLUGIN)
     add_subdirectory(cmark)
     message("Building cmark-plugin")
 else()

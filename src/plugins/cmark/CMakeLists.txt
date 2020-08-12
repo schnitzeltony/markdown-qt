@@ -1,6 +1,3 @@
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(CMARK REQUIRED libcmark>=0.28.3)
-
 add_library(PluginCmark
     MODULE
         cmark-plugin.h
