@@ -93,7 +93,7 @@ private:
 };
 
 // hmm should be member of CMarkDownQt.. / printer is not a data format
-constexpr std::initializer_list<CMarkDownQt::DataFormat> validDataFormats =
+const std::initializer_list<CMarkDownQt::DataFormat> validDataFormats =
 {
     CMarkDownQt::FormatMdUtf8,
     CMarkDownQt::FormatHtmlUtf8,
