@@ -50,8 +50,8 @@ target_include_directories(MarkdownQt
 # additional compiler options
 target_compile_options(MarkdownQt PRIVATE -Wall)
 
-# some target magic added by qtcreator
-target_compile_definitions(MarkdownQt PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+# add QT_QML_DEBUG for debug-config (this is C++ only - uncomment as soon as we add QML)
+#target_compile_definitions(MarkdownQt PRIVATE $<$<CONFIG:Debug>:QT_QML_DEBUG>)
 
 target_link_libraries(MarkdownQt
     PRIVATE
